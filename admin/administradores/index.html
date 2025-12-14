@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <link rel="icon" type="image/svg+xml" href="../../images/logo-vetorizada-nobg.svg">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administradores - Admin</title>
+    <link rel="stylesheet" href="../../style/style-admin.css">
+</head>
+
+<body>
+    <!-- Conteúdo (hidden until auth validated) -->
+    <div class="content" style="display:none;">
+        <div class="topbar">
+            <h1>Administradores</h1>
+            <div class="search">
+                <input type="text" id="searchInput" placeholder="Buscar administradores..." onkeyup="filterTable()">
+            </div>
+            <div class="actions">
+                <button onclick="deleteSelected()">Excluir</button>
+                <button onclick="openAddModal()">Adicionar</button>
+                <button onclick="window.location.href='../'">Voltar ao Menu</button>
+                <button class="btn-sair" onclick="logout()">Sair</button>
+            </div>
+        </div>
+
+        <div class="alert alert-info" style="margin: 0 0 30px 0;">
+            ⚠️ Esta área é restrita apenas para você. Gerencie outros administradores com cuidado.
+        </div>
+
+        <div class="grid">
+            <!-- Tabela de Administradores -->
+            <div class="card" style="flex: 1 1 100%;">
+                <div class="card-header">Lista de Administradores</div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table id="adminsTable">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" onchange="selectAll(this)"></th>
+                                    <th>ID</th>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminsBody">
+                                <tr>
+                                    <td colspan="7" class="loading">Carregando dados...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pagination" id="adminPagination">
+                        <button onclick="changePage('first')" id="firstBtn">&laquo;</button>
+                        <button onclick="changePage('prev')" id="prevBtn">&lt;</button>
+                        <span id="pageInfo">1 de 1</span>
+                        <button onclick="changePage('next')" id="nextBtn">&gt;</button>
+                        <button onclick="changePage('last')" id="lastBtn">&raquo;</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal para adicionar/editar admin -->
+        <div class="modal" id="adminModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modalTitle">Adicionar Administrador</h2>
+                    <button class="modal-close" onclick="closeModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info" style="margin-bottom: 20px;">
+                        ⚠️ Instrua o seu administrador de página a mudar a senha após o primeiro login.
+                    </div>
+                    <form id="adminForm">
+                        <div class="form-group">
+                            <label for="adminUsername">Username</label>
+                            <input type="text" id="adminUsername" placeholder="Digite o username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="adminEmail">Email</label>
+                            <input type="email" id="adminEmail" placeholder="Digite o email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="adminSenha">Senha</label>
+                            <input type="password" id="adminSenha" placeholder="Digite a senha" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+                    <button class="btn btn-primary" onclick="saveAdmin()">Salvar</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        var TOKEN_KEY = 'token';
+        const API_URL = 'https://api-nr.vercel.app/api';
+        
+        // Pagination state
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        let allAdmins = [];
+        let editingId = null;
+        let currentUserId = null;
+
+        function logout() {
+            try { localStorage.removeItem(TOKEN_KEY); } catch (e) { console.warn('Could not remove token', e); }
+            window.location.href = '../../login';
+        }
+
+        function selectAll(checkbox) {
+            const checkboxes = document.querySelectorAll('#adminsTable tbody input[type="checkbox"]');
+            checkboxes.forEach(cb => {
+                // Não permitir seleção do próprio usuário ou super admin
+                const row = cb.closest('tr');
+                const adminId = parseInt(cb.dataset.id);
+                if (adminId !== 1 && adminId !== currentUserId) {
+                    cb.checked = checkbox.checked;
+                }
+            });
+        }
+
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = allAdmins.filter(a => 
+                a.username?.toLowerCase().includes(searchTerm) || 
+                a.email?.toLowerCase().includes(searchTerm)
+            );
+            
+            currentPage = 1;
+            renderAdmins(filtered);
+        }
+
+        function renderAdmins(data = allAdmins) {
+            const tbody = document.getElementById('adminsBody');
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const pageData = data.slice(start, end);
+            const totalPages = Math.ceil(data.length / itemsPerPage) || 1;
+            
+            if (pageData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="empty-state"><div class="empty-state-icon">👥</div><div class="empty-state-text">Nenhum administrador encontrado</div><div class="empty-state-subtext">Adicione administradores para começar</div></td></tr>';
+            } else {
+                tbody.innerHTML = pageData.map(admin => {
+                    const isProtected = admin.id === 1 || admin.id === currentUserId;
+                    const checkboxHtml = isProtected 
+                        ? '<input type="checkbox" disabled title="Este usuário não pode ser selecionado">' 
+                        : `<input type="checkbox" data-id="${admin.id}">`;
+                    
+                    return `
+                        <tr ${isProtected ? 'style="background: rgba(147, 217, 226, 0.05);"' : ''}>
+                            <td>${checkboxHtml}</td>
+                            <td>${admin.id}${admin.id === 1 ? ' 🔒' : admin.id === currentUserId ? ' (Você)' : ''}</td>
+                            <td>${admin.username || 'N/A'}</td>
+                            <td>${admin.email || 'N/A'}</td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+            
+            document.getElementById('pageInfo').textContent = `${currentPage} de ${totalPages}`;
+            document.getElementById('firstBtn').disabled = currentPage === 1;
+            document.getElementById('prevBtn').disabled = currentPage === 1;
+            document.getElementById('nextBtn').disabled = currentPage === totalPages;
+            document.getElementById('lastBtn').disabled = currentPage === totalPages;
+        }
+
+        function changePage(action) {
+            const totalPages = Math.ceil(allAdmins.length / itemsPerPage);
+            
+            if (action === 'first') currentPage = 1;
+            else if (action === 'prev' && currentPage > 1) currentPage--;
+            else if (action === 'next' && currentPage < totalPages) currentPage++;
+            else if (action === 'last') currentPage = totalPages;
+            
+            renderAdmins();
+        }
+
+        function openAddModal() {
+            editingId = null;
+            document.getElementById('modalTitle').textContent = 'Adicionar Administrador';
+            document.getElementById('adminForm').reset();
+            document.getElementById('adminModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('adminModal').classList.remove('active');
+            editingId = null;
+        }
+
+        async function saveAdmin() {
+            const form = document.getElementById('adminForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const admin = {
+                username: document.getElementById('adminUsername').value,
+                email: document.getElementById('adminEmail').value,
+                senha: document.getElementById('adminSenha').value
+            };
+
+            const token = localStorage.getItem(TOKEN_KEY);
+            
+            try {
+                const response = await fetch(`${API_URL}/admin/administradores`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(admin)
+                });
+
+                const responseData = await response.json().catch(() => ({}));
+
+                if (!response.ok) {
+                    let errorMessage = responseData.error || responseData.message;
+                    
+                    // Tratamento para erros de validação (formato antigo)
+                    if (responseData.errors && Array.isArray(responseData.errors)) {
+                        errorMessage = responseData.errors.map(err => err.msg).join('\n');
+                    }
+                    
+                    alert(errorMessage || `Erro ao adicionar administrador: ${response.status}`);
+                    return;
+                }
+
+                alert('Administrador adicionado com sucesso!\n\nLembre-se de instruir o novo administrador a alterar a senha no primeiro login.');
+                closeModal();
+                await loadData();
+            } catch (error) {
+                console.error('Erro ao salvar administrador:', error);
+                alert('Erro ao salvar administrador: ' + error.message);
+            }
+        }
+
+        async function deleteSelected() {
+            const checked = Array.from(document.querySelectorAll('#adminsTable tbody input:checked')).map(cb => parseInt(cb.dataset.id));
+            
+            if (checked.length === 0) {
+                alert('Selecione pelo menos um administrador para excluir');
+                return;
+            }
+            
+            if (!confirm(`Deseja realmente excluir ${checked.length} administrador(es)?\n\nEsta ação não pode ser desfeita!`)) {
+                return;
+            }
+
+            const token = localStorage.getItem(TOKEN_KEY);
+            const deletePromises = checked.map(id => 
+                fetch(`${API_URL}/admin/administradores/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Accept': 'application/json'
+                    }
+                })
+            );
+
+            try {
+                const results = await Promise.all(deletePromises);
+                const failures = results.filter(r => !r.ok);
+                
+                if (failures.length > 0) {
+                    alert(`Erro ao excluir ${failures.length} administrador(es). Verifique o console para detalhes.`);
+                    console.error('Falhas na exclusão:', failures);
+                } else {
+                    alert(`${checked.length} administrador(es) excluído(s) com sucesso!`);
+                }
+                
+                await loadData();
+            } catch (error) {
+                console.error('Erro ao excluir administradores:', error);
+                alert('Erro ao excluir administradores. Tente novamente.');
+            }
+        }
+
+        async function loadData() {
+            const token = localStorage.getItem(TOKEN_KEY);
+            
+            try {
+                const response = await fetch(`${API_URL}/admin/administradores`, {
+                    method: 'GET',
+                    headers: { 
+                        'Authorization': 'Bearer ' + token,
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                allAdmins = await response.json();
+                renderAdmins();
+            } catch (error) {
+                console.error('Erro ao carregar dados:', error);
+                document.getElementById('adminsBody').innerHTML = '<tr><td colspan="4"><div class="alert alert-error">Erro ao carregar administradores. Tente novamente.</div></td></tr>';
+            }
+        }
+
+        (function validateAuthAndInit() {
+            const AUTH_URL = API_URL + '/auth/perfil';
+
+            const token = localStorage.getItem(TOKEN_KEY);
+            if (!token) {
+                window.location.href = '../../login';
+                return;
+            }
+
+            fetch(AUTH_URL, {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Unauthorized');
+                return response.json();
+            })
+            .then(data => {
+                const userId = data.userid ?? data.userId ?? data.id ?? null;
+                currentUserId = userId;
+
+                // Apenas usuário ID 1 pode acessar esta página
+                if (userId !== 1 && userId !== '1') {
+                    alert('Acesso negado! Esta área é restrita ao super administrador.');
+                    window.location.href = '../';
+                    return;
+                }
+
+                // Reveal UI
+                const content = document.querySelector('.content');
+                if (content) content.style.display = '';
+
+                // Load data
+                loadData();
+            })
+            .catch(err => {
+                console.error('Auth validation failed:', err);
+                try { localStorage.removeItem(TOKEN_KEY); } catch (e) {}
+                window.location.href = '../../login';
+            });
+        })();
+    </script>
+</body>
+</html>

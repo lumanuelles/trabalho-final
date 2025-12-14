@@ -5,19 +5,28 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Login - Admin</title>
-        <link rel="stylesheet" href="../style/style-aulas-admin.css">
+        <link rel="stylesheet" href="../style/style-login.css">
     </head>
     <body id="index">
         <div id="login">
             <img src="../images/logotipo.png" id="logo-form"/> 
 
-            <form action="../admin/index-a.html" method="get">
+            <form id="login-form" onsubmit="return false;">
                 <input type="text" id="usuario" name="usuario" placeholder="Usuário" required>
                 <input type="password" id="senha" name="senha" placeholder="Senha" required>
-                <button type="submit" id="bt-entrar">Entrar</button>
-                <span id="msg"></span>
+                <button type="button" id="bt-entrar">Entrar</button>
             </form>
-            <span id="msg" class=""></span>
+            <span id="msg" style="display: none;"></span>
         </div>
+        <script src="../login.js"></script>
+        <script>
+        // Permite que pressionar Enter no formulário acione o botão 'bt-entrar'
+        document.getElementById('login-form').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                document.getElementById('bt-entrar').click();
+            }
+        });
+        </script>
     </body>
 </html>

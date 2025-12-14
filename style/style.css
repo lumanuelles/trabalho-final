@@ -1204,7 +1204,7 @@ body.aulas-page::before {
 .circular-layout {
     position: relative;
     width: 1000px;
-    height: 400px;
+    height: 450px;
     max-width: 95vw;
 }
 
@@ -1253,8 +1253,8 @@ body.aulas-page::before {
 }
 
 .image-center img {
-    width: 100%;
-    height: 100%;
+    width: 115%;
+    height: 115%;
     object-fit: contain;
     display: block;
     transition: transform 260ms ease;

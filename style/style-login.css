@@ -1,0 +1,148 @@
+/* ========================================
+   LOGIN PAGE STYLES
+   ======================================== */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Montserrat", sans-serif;
+}
+
+body#index {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #0a1929 0%, #17385a 35%, #1e4d6b 65%, #2a5f7e 100%);
+    background-attachment: fixed;
+    position: relative;
+}
+
+body#index::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(ellipse at 20% 30%, rgba(147, 217, 226, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(147, 217, 226, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+#login {
+    position: relative;
+    z-index: 1;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 50px 45px;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+}
+
+#logo-form {
+    width: 100%;
+    max-width: 280px;
+    height: auto;
+    margin-bottom: 35px;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
+}
+
+#login form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#login input {
+    width: 100%;
+    padding: 15px 18px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 15px;
+    color: #334155;
+    background: #ffffff;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+#login input::placeholder {
+    color: #94a3b8;
+}
+
+#login input:focus {
+    border-color: #17385a;
+    box-shadow: 0 0 0 3px rgba(23, 56, 90, 0.1);
+    background: #ffffff;
+}
+
+#bt-entrar {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #17385a 0%, #2a5f7e 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(23, 56, 90, 0.3);
+    margin-top: 10px;
+}
+
+#bt-entrar:hover {
+    background: linear-gradient(135deg, #1e4d6b 0%, #17385a 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(23, 56, 90, 0.4);
+}
+
+#bt-entrar:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(23, 56, 90, 0.3);
+}
+
+#msg {
+    display: block;
+    margin-top: 15px;
+    font-size: 14px;
+    font-weight: 500;
+    min-height: 20px;
+    padding-top: 6px;
+    margin-bottom: -30px;
+}
+
+#msg.error {
+    color: #dc2626;
+}
+
+#msg.success {
+    color: #16a34a;
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+@media (max-width: 480px) {
+    #login {
+        padding: 40px 30px;
+        margin: 20px;
+    }
+
+    #logo-form {
+        max-width: 220px;
+        margin-bottom: 30px;
+    }
+
+    #login input,
+    #bt-entrar {
+        padding: 14px 16px;
+        font-size: 14px;
+    }
+}

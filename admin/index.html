@@ -4,88 +4,94 @@
         <link rel="icon" type="image/svg+xml" href="../images/logo-vetorizada-nobg.svg">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Aulas Ofertadas</title>
-    <link rel="stylesheet" href="../style/style-aulas-admin.css">
+        <title>Painel Administrativo</title>
+        <link rel="stylesheet" href="../style/style-admin.css">
     </head>
 
     <body>
-    <!-- Sidebar -->
-    <div class="sidebar collapsed" id="sidebar">
-            <div class="logo">
-            <img src="../images/logotipo.png" alt="Logo">
+    <!-- Conteúdo (hidden until auth validated) -->
+    <div class="content" style="display:none;">
+
+        <div class="dashboard-header">
+            <h1>Painel Administrativo</h1>
+            <button class="logout-btn" onclick="logout()">Sair</button>
         </div>
-            <ul class="menu">
-            <li><i>🎵</i> <a href="index-a.html"><span>Aulas</span></a></li>
-            <li><i>➕</i> <a href="produtos.html"><span>Produtos</span></a></li>
-        </ul>
+
+        <div class="dashboard-grid" id="dashboardGrid">
+            <!-- Produtos Card -->
+            <div class="dashboard-card" onclick="window.location.href='../admin/produtos/'">
+                <div class="card-icon">🎵</div>
+                <h2>Produtos</h2>
+                <p>Gerencie os produtos da loja</p>
+                <div class="card-arrow">→</div>
+            </div>
+
+            <!-- Administradores Card (will be added dynamically for admin user) -->
+        </div>
+
     </div>
-
-    <!-- Conteúdo -->
-    <div class="content">
-        <button class="toggle-btn" onclick="toggleMenu()">☰</button>
-
-        <div class="topbar">
-        <h1>Aulas Ofertadas</h1>
-        <div class="search">
-            <input type="text" placeholder="Buscar...">
-        </div>
-        <div class="actions">
-            <button>Excluir</button>
-            <button>Editar</button>
-            <button>Adicionar</button>
-        </div>
-        </div>
-
-        <div class="grid">
-        <!-- Professores -->
-        <div class="card">
-            <div class="card-header">Professor</div>
-            <div class="card-body">
-            <div class="rows">
-                <div class="row"></div>
-                <div class="row"></div>
-                <div class="row"></div>
-                <div class="row"></div>
-                <div class="row"></div>
-            </div>
-            <div class="pagination">
-                <button>&laquo;</button>
-                <button>&lt;</button>
-                <span>1 de 7</span>
-                <button>&gt;</button>
-                <button>&raquo;</button>
-            </div>
-            </div>
-        </div>
-
-        <!-- Instrumentos -->
-        <div class="card">
-            <div class="card-header">Instrumento</div>
-            <div class="card-body">
-            <div class="rows">
-                <div class="row"></div>
-                <div class="row"></div>
-                <div class="row"></div>
-                <div class="row"></div>
-                <div class="row"></div>
-            </div>
-            <div class="pagination">
-                <button>&laquo;</button>
-                <button>&lt;</button>
-                <span>1 de 7</span>
-                <button>&gt;</button>
-                <button>&raquo;</button>
-            </div>
-            </div>
-        </div>
-        </div>
 
     </div>
 
     <script>
-        function toggleMenu() {
-        document.getElementById("sidebar").classList.toggle("collapsed");
+        var TOKEN_KEY = 'token';
+        const API_URL = 'https://api-nr.vercel.app/api';
+
+        function logout() {
+            try { localStorage.removeItem(TOKEN_KEY); } catch (e) { console.warn('Could not remove token', e); }
+            window.location.href = '../login';
         }
+
+        (function validateAuthAndInit() {
+            const AUTH_URL = API_URL + '/auth/perfil';
+
+            const token = localStorage.getItem(TOKEN_KEY);
+            if (!token) {
+                window.location.href = '../login';
+                return;
+            }
+
+            fetch(AUTH_URL, {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Unauthorized');
+                return response.json();
+            })
+            .then(data => {
+                const userId = data.userid ?? data.userId ?? data.id ?? null;
+
+                // Reveal UI
+                const content = document.querySelector('.content');
+                if (content) content.style.display = '';
+
+                // If user is admin (id === 1) add Administradores card
+                if (userId === 1 || userId === '1') {
+                    const dashboardGrid = document.getElementById('dashboardGrid');
+                    if (dashboardGrid) {
+                        const adminCard = document.createElement('div');
+                        adminCard.className = 'dashboard-card';
+                        adminCard.onclick = function() { window.location.href = '../admin/administradores/'; };
+                        adminCard.innerHTML = `
+                            <div class="card-icon">⚙️</div>
+                            <h2>Administradores</h2>
+                            <p>Gerencie os administradores do sistema</p>
+                            <div class="card-arrow">→</div>
+                        `;
+                        dashboardGrid.appendChild(adminCard);
+                    }
+                }
+            })
+            .catch(err => {
+                console.error('Auth validation failed:', err);
+                try { localStorage.removeItem(TOKEN_KEY); } catch (e) {}
+                window.location.href = '../login';
+            });
+        })();
     </script>
     </body>
 </html>

@@ -96,7 +96,7 @@
             text-align: left;
             width: 100%;
             display: -webkit-box;
-            -webkit-line-clamp: 2;
+            line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -124,8 +124,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-width: 220px;
-            max-width: 260px;
+            width: 260px;
             overflow: hidden;
             opacity: 0;
             transform: translateY(20px);
@@ -146,7 +145,7 @@
 
         .produto-imagem {
             width: 100%;
-            aspect-ratio: 3/2;
+            aspect-ratio: 16/9;
             background: #f3f3f3;
             display: flex;
             align-items: center;
@@ -154,6 +153,7 @@
             position: relative;
             overflow: hidden;
             margin-bottom: 16px;
+            flex-shrink: 0;
         }
 
         .produto-imagem img {
@@ -170,23 +170,256 @@
             background: transparent;
         }
 
-        .produto-imagem img.produto-img-1 {
+        .produto-imagem img.produto-img-active {
             opacity: 1;
             z-index: 2;
         }
 
-        .produto-imagem img.produto-img-2 {
+        .produto-imagem img:not(.produto-img-active) {
             opacity: 0;
             z-index: 1;
         }
 
-        @media (hover: hover) and (pointer: fine) {
-            .produto-card:hover .produto-imagem img.produto-img-1 {
-                opacity: 0;
-            }
+        /* Carousel arrows */
+        .produto-carousel-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 28px;
+            height: 28px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.2s ease, background 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        }
 
-            .produto-card:hover .produto-imagem img.produto-img-2 {
-                opacity: 1;
+        .produto-imagem:hover .produto-carousel-arrow {
+            opacity: 1;
+        }
+
+        .produto-carousel-arrow:hover {
+            background: #fff;
+        }
+
+        .produto-carousel-arrow.prev {
+            left: 8px;
+        }
+
+        .produto-carousel-arrow.next {
+            right: 8px;
+        }
+
+        .produto-carousel-arrow i {
+            font-size: 12px;
+            color: #333;
+        }
+
+        /* Carousel dots */
+        .produto-carousel-dots {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 5px;
+            z-index: 10;
+        }
+
+        .produto-carousel-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.2s ease;
+            border: none;
+            padding: 0;
+        }
+
+        .produto-carousel-dot.active {
+            background: #fff;
+            transform: scale(1.2);
+        }
+
+        .produto-carousel-dot:hover {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Zoom overlay icon */
+        .produto-zoom-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            z-index: 5;
+            cursor: pointer;
+            pointer-events: none;
+        }
+
+        .produto-imagem:hover .produto-zoom-overlay {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .produto-imagem:hover .produto-carousel-arrow {
+            z-index: 15;
+        }
+
+        .produto-zoom-overlay i {
+            font-size: 28px;
+            color: #fff;
+        }
+
+        /* Lightbox modal */
+        .produto-lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.92);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .produto-lightbox.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .produto-lightbox-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .produto-lightbox-image-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .produto-lightbox-image-container img {
+            max-width: 85vw;
+            max-height: 80vh;
+            object-fit: contain;
+            border-radius: 8px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            position: absolute;
+        }
+
+        .produto-lightbox-image-container img.active {
+            opacity: 1;
+            position: relative;
+        }
+
+        .produto-lightbox-close {
+            position: absolute;
+            top: -40px;
+            right: -10px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 32px;
+            cursor: pointer;
+            padding: 8px;
+            transition: transform 0.2s ease;
+        }
+
+        .produto-lightbox-close:hover {
+            transform: scale(1.1);
+        }
+
+        .produto-lightbox-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease;
+            z-index: 10;
+        }
+
+        .produto-lightbox-arrow:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .produto-lightbox-arrow.prev {
+            left: -70px;
+        }
+
+        .produto-lightbox-arrow.next {
+            right: -70px;
+        }
+
+        .produto-lightbox-arrow i {
+            font-size: 20px;
+            color: #fff;
+        }
+
+        .produto-lightbox-dots {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .produto-lightbox-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.2s ease;
+            border: none;
+            padding: 0;
+        }
+
+        .produto-lightbox-dot.active {
+            background: #fff;
+            transform: scale(1.2);
+        }
+
+        .produto-lightbox-dot:hover {
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        @media (max-width: 768px) {
+            .produto-lightbox-arrow.prev {
+                left: 10px;
+            }
+            .produto-lightbox-arrow.next {
+                right: 10px;
             }
         }
 
@@ -278,6 +511,177 @@
     </section>
 
     <script>
+        // Carousel navigation functions
+        function getCurrentSlideIndex(container) {
+            const activeImg = container.querySelector('img.produto-img-active');
+            return activeImg ? parseInt(activeImg.dataset.index) : 0;
+        }
+
+        function navigateCarousel(container, direction) {
+            const images = container.querySelectorAll('img');
+            const dots = container.querySelectorAll('.produto-carousel-dot');
+            const currentIndex = getCurrentSlideIndex(container);
+            let newIndex = currentIndex + direction;
+            
+            if (newIndex < 0) newIndex = images.length - 1;
+            if (newIndex >= images.length) newIndex = 0;
+            
+            goToSlide(container, newIndex);
+        }
+
+        function goToSlide(container, index) {
+            const images = container.querySelectorAll('img');
+            const dots = container.querySelectorAll('.produto-carousel-dot');
+            
+            images.forEach((img, i) => {
+                img.classList.toggle('produto-img-active', i === index);
+            });
+            
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        }
+
+        // Lightbox functions
+        let currentLightboxImages = [];
+        let currentLightboxIndex = 0;
+
+        function openLightbox(images, startIndex = 0) {
+            currentLightboxImages = images;
+            currentLightboxIndex = startIndex;
+            
+            // Create lightbox if it doesn't exist
+            let lightbox = document.querySelector('.produto-lightbox');
+            if (!lightbox) {
+                lightbox = document.createElement('div');
+                lightbox.className = 'produto-lightbox';
+                lightbox.innerHTML = `
+                    <div class="produto-lightbox-content">
+                        <button class="produto-lightbox-close"><i class="fas fa-times"></i></button>
+                        <div class="produto-lightbox-image-container"></div>
+                        <div class="produto-lightbox-dots"></div>
+                    </div>
+                `;
+                document.body.appendChild(lightbox);
+                
+                // Add navigation arrows
+                const imageContainer = lightbox.querySelector('.produto-lightbox-image-container');
+                const prevArrow = document.createElement('button');
+                prevArrow.className = 'produto-lightbox-arrow prev';
+                prevArrow.innerHTML = '<i class="fas fa-chevron-left"></i>';
+                prevArrow.onclick = () => navigateLightbox(-1);
+                
+                const nextArrow = document.createElement('button');
+                nextArrow.className = 'produto-lightbox-arrow next';
+                nextArrow.innerHTML = '<i class="fas fa-chevron-right"></i>';
+                nextArrow.onclick = () => navigateLightbox(1);
+                
+                imageContainer.appendChild(prevArrow);
+                imageContainer.appendChild(nextArrow);
+                
+                // Close on background click
+                lightbox.onclick = (e) => {
+                    if (e.target === lightbox) closeLightbox();
+                };
+                
+                // Close button
+                lightbox.querySelector('.produto-lightbox-close').onclick = closeLightbox;
+                
+                // Keyboard navigation
+                document.addEventListener('keydown', handleLightboxKeydown);
+            }
+            
+            updateLightboxContent();
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function updateLightboxContent() {
+            const lightbox = document.querySelector('.produto-lightbox');
+            const imageContainer = lightbox.querySelector('.produto-lightbox-image-container');
+            const dotsContainer = lightbox.querySelector('.produto-lightbox-dots');
+            
+            // Clear existing images (keep arrows)
+            const existingImages = imageContainer.querySelectorAll('img');
+            existingImages.forEach(img => img.remove());
+            
+            // Add all images
+            currentLightboxImages.forEach((src, i) => {
+                const img = document.createElement('img');
+                img.src = src;
+                img.className = i === currentLightboxIndex ? 'active' : '';
+                imageContainer.insertBefore(img, imageContainer.querySelector('.produto-lightbox-arrow'));
+            });
+            
+            // Update dots
+            dotsContainer.innerHTML = '';
+            if (currentLightboxImages.length > 1) {
+                currentLightboxImages.forEach((_, i) => {
+                    const dot = document.createElement('button');
+                    dot.className = `produto-lightbox-dot${i === currentLightboxIndex ? ' active' : ''}`;
+                    dot.onclick = () => goToLightboxSlide(i);
+                    dotsContainer.appendChild(dot);
+                });
+            }
+            
+            // Hide arrows if single image
+            const arrows = imageContainer.querySelectorAll('.produto-lightbox-arrow');
+            arrows.forEach(arrow => {
+                arrow.style.display = currentLightboxImages.length > 1 ? 'flex' : 'none';
+            });
+        }
+
+        function navigateLightbox(direction) {
+            currentLightboxIndex += direction;
+            if (currentLightboxIndex < 0) currentLightboxIndex = currentLightboxImages.length - 1;
+            if (currentLightboxIndex >= currentLightboxImages.length) currentLightboxIndex = 0;
+            
+            const imageContainer = document.querySelector('.produto-lightbox-image-container');
+            const images = imageContainer.querySelectorAll('img');
+            const dots = document.querySelectorAll('.produto-lightbox-dot');
+            
+            images.forEach((img, i) => {
+                img.classList.toggle('active', i === currentLightboxIndex);
+            });
+            
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentLightboxIndex);
+            });
+        }
+
+        function goToLightboxSlide(index) {
+            currentLightboxIndex = index;
+            
+            const imageContainer = document.querySelector('.produto-lightbox-image-container');
+            const images = imageContainer.querySelectorAll('img');
+            const dots = document.querySelectorAll('.produto-lightbox-dot');
+            
+            images.forEach((img, i) => {
+                img.classList.toggle('active', i === currentLightboxIndex);
+            });
+            
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentLightboxIndex);
+            });
+        }
+
+        function closeLightbox() {
+            const lightbox = document.querySelector('.produto-lightbox');
+            if (lightbox) {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        function handleLightboxKeydown(e) {
+            const lightbox = document.querySelector('.produto-lightbox');
+            if (!lightbox || !lightbox.classList.contains('active')) return;
+            
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') navigateLightbox(-1);
+            if (e.key === 'ArrowRight') navigateLightbox(1);
+        }
+
         // Add spin animation to loader SVG
         function spinLoader() {
             const loader = document.getElementById('loader');
@@ -334,23 +738,60 @@
                         imagens = [produto.imagem];
                     }
 
-                    // Cria as imagens (máximo 2 para efeito hover)
+                    // Create all images for carousel
                     if (imagens.length > 0) {
-                        // Primeira imagem
-                        const img1 = document.createElement('img');
-                        img1.src = imagens[0];
-                        img1.alt = produto.nome || 'Produto';
-                        img1.className = 'produto-img-1';
-                        // Segunda imagem (se existir)
-                        let img2 = null;
+                        imagens.forEach((imgSrc, imgIndex) => {
+                            const img = document.createElement('img');
+                            img.src = imgSrc;
+                            img.alt = produto.nome || 'Produto';
+                            img.className = imgIndex === 0 ? 'produto-img-active' : '';
+                            img.dataset.index = imgIndex;
+                            imagemDiv.appendChild(img);
+                        });
+
+                        // Add carousel arrows if multiple images
                         if (imagens.length > 1) {
-                            img2 = document.createElement('img');
-                            img2.src = imagens[1];
-                            img2.alt = produto.nome || 'Produto';
-                            img2.className = 'produto-img-2';
+                            const prevArrow = document.createElement('button');
+                            prevArrow.className = 'produto-carousel-arrow prev';
+                            prevArrow.innerHTML = '<i class="fas fa-chevron-left"></i>';
+                            prevArrow.onclick = (e) => {
+                                e.stopPropagation();
+                                navigateCarousel(imagemDiv, -1);
+                            };
+
+                            const nextArrow = document.createElement('button');
+                            nextArrow.className = 'produto-carousel-arrow next';
+                            nextArrow.innerHTML = '<i class="fas fa-chevron-right"></i>';
+                            nextArrow.onclick = (e) => {
+                                e.stopPropagation();
+                                navigateCarousel(imagemDiv, 1);
+                            };
+
+                            imagemDiv.appendChild(prevArrow);
+                            imagemDiv.appendChild(nextArrow);
+
+                            // Add carousel dots
+                            const dotsContainer = document.createElement('div');
+                            dotsContainer.className = 'produto-carousel-dots';
+                            imagens.forEach((_, dotIndex) => {
+                                const dot = document.createElement('button');
+                                dot.className = `produto-carousel-dot${dotIndex === 0 ? ' active' : ''}`;
+                                dot.dataset.index = dotIndex;
+                                dot.onclick = (e) => {
+                                    e.stopPropagation();
+                                    goToSlide(imagemDiv, dotIndex);
+                                };
+                                dotsContainer.appendChild(dot);
+                            });
+                            imagemDiv.appendChild(dotsContainer);
                         }
-                        imagemDiv.appendChild(img1);
-                        if (img2) imagemDiv.appendChild(img2);
+
+                        // Add zoom overlay
+                        const zoomOverlay = document.createElement('div');
+                        zoomOverlay.className = 'produto-zoom-overlay';
+                        zoomOverlay.innerHTML = '<i class="fas fa-expand"></i>';
+                        zoomOverlay.onclick = () => openLightbox(imagens, getCurrentSlideIndex(imagemDiv));
+                        imagemDiv.appendChild(zoomOverlay);
                     }
 
                     // Bloco de informações do produto
