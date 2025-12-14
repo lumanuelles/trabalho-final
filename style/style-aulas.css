@@ -1,0 +1,797 @@
+/* ========================================
+   IMPORTS AND FONTS
+   ======================================== */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* ========================================
+   RESET AND BASE STYLES
+   ======================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Montserrat", sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding-top: 80px;
+    background: linear-gradient(180deg, #fafbfc 0%, #f5f7fa 50%, #ffffff 100%);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4 {
+    margin: 0;
+    line-height: 1.2;
+}
+
+h3 {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* ========================================
+   HEADER AND NAVIGATION
+   ======================================== */
+header {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    width: 100%;
+    height: 80px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.menu {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.menu ul {
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    margin-left: auto;
+    margin-right: 20px;
+}
+
+.menu ul > li > a {
+    text-decoration: none;
+    color: black;
+    padding: 12px 14px;
+    font-size: 16px;
+    transition: color 220ms ease-in-out, font-size 220ms ease-in-out, padding 220ms ease-in-out;
+    display: inline-block;
+}
+
+.menu ul > li > a:hover,
+.menu ul > li > a:focus {
+    color: #17385a;
+    text-decoration: none;
+    font-size: 17.5px;
+    padding: 12px 20px;
+    outline: none;
+}
+
+.menu a > img {
+    height: 60px;
+    width: auto;
+    margin-left: 10px;
+}
+
+/* ========================================
+   SECTION HEADERS (REUSABLE)
+   ======================================== */
+.section-header,
+.instruments-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.section-label {
+    display: inline-block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #17385a;
+    margin-bottom: 12px;
+    position: relative;
+    padding-bottom: 8px;
+}
+
+.section-label::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 3px;
+    background: linear-gradient(90deg, #17385a, #3d7aa4);
+    border-radius: 2px;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 12px;
+}
+
+.section-description {
+    font-size: 1.1rem;
+    color: #666;
+    margin-top: 12px;
+}
+
+/* ========================================
+   CLASSES SECTION
+   ======================================== */
+.classes-section {
+    max-width: 1400px;
+    margin: 60px auto 80px;
+    padding: 0 20px;
+}
+
+.classes-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.class-card {
+    position: relative;
+    background: white;
+    border-radius: 16px;
+    padding: 28px 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    overflow: hidden;
+    cursor: default;
+}
+
+.class-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #17385a, #3d7aa4);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.class-card:hover::before {
+    opacity: 1;
+}
+
+.card-hover-effect {
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(61, 122, 164, 0.1) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
+
+.class-card:hover .card-hover-effect {
+    opacity: 1;
+}
+
+.class-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 40px rgba(23, 56, 90, 0.15);
+}
+
+.card-icon {
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, #17385a 0%, #3d7aa4 100%);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+    transition: transform 0.4s ease;
+}
+
+.class-card:hover .card-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.card-icon i {
+    font-size: 26px;
+    color: white;
+}
+
+.card-content h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 12px;
+    text-align: left;
+}
+
+.card-content p {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: #666;
+    text-align: left;
+    margin: 0;
+}
+
+/* ========================================
+   INSTRUMENTS SECTION
+   ======================================== */
+.instruments-section {
+    position: relative;
+    width: 100%;
+    padding: 60px 20px 80px;
+    background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 50%, #ffffff 100%);
+    overflow: hidden;
+}
+
+.instruments-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(23, 56, 90, 0.1) 50%, transparent 100%);
+}
+
+.instruments-header {
+    margin-bottom: 15px;
+}
+
+/* Simple carousel for mobile/tablet */
+.instruments-simple-list {
+    display: none;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.carousel-card {
+    background: white;
+    border-radius: 20px;
+    padding: 40px 30px 30px;
+    box-shadow: 0 8px 32px rgba(23, 56, 90, 0.12);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+}
+
+.carousel-image-container {
+    width: 100%;
+    max-width: 350px;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.carousel-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 400ms ease, transform 400ms ease;
+}
+
+.carousel-image-container img.active {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.carousel-instrument-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #17385a;
+    text-align: center;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carousel-dots {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.carousel-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #d4dce5;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.carousel-dot.active {
+    background: #17385a;
+    width: 24px;
+    border-radius: 4px;
+}
+
+.carousel-dot:hover {
+    background: #3d7aa4;
+}
+
+.instruments-showcase {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.circular-layout {
+    position: relative;
+    width: 1000px;
+    height: 550px;
+    max-width: 95vw;
+}
+
+/* Stadium background capsule */
+.stadium-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 260px;
+    height: 370px;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.stadium {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #e8eef3 0%, #d4dce5 100%);
+    border-radius: 9999px;
+    box-shadow: 0 10px 40px rgba(23, 56, 90, 0.1);
+}
+
+/* Center image shown when hovering instrument labels */
+.image-center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(0.96);
+    width: 420px;
+    height: 420px;
+    max-width: 68%;
+    max-height: 68%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.image-center.visible {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.image-center img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    transition: transform 260ms ease;
+}
+
+.instrument-item {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.instrument-text {
+    position: absolute;
+    z-index: 3;
+    pointer-events: auto;
+    white-space: nowrap;
+    color: #555;
+    padding: 0 18px;
+    font-size: 1.05rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 300ms cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.instrument-text-inner {
+    display: inline-block;
+    transform-origin: center;
+    transition: transform 300ms cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.instrument-text:hover .instrument-text-inner,
+.instrument-text:focus .instrument-text-inner {
+    transform: scale(1.15);
+    color: #17385a;
+    font-weight: 700;
+}
+
+.instrument-text.active .instrument-text-inner {
+    transform: scale(1.15);
+    color: #17385a;
+    font-weight: 700;
+}
+
+.node-dot {
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    background: linear-gradient(135deg, #c8d4e0 0%, #b0bfce 100%);
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(23, 56, 90, 0.15);
+    z-index: 3;
+    transition: all 0.3s ease;
+}
+
+/* ========================================
+   FOOTER
+   ======================================== */
+footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding: 15px 15px;
+    background-image: url('../images/background-footer.jpg');
+    background-repeat: repeat;
+    background-size: 90px auto;
+    background-position: center;
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(5px);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    min-height: 100px;
+    position: relative;
+}
+
+.footer-section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+}
+
+.footer-section:first-child {
+    justify-content: flex-start;
+}
+
+.footer-section:nth-child(2) {
+    position: static;
+    left: auto;
+    transform: none;
+}
+
+.footer-section:last-child {
+    justify-content: flex-end;
+}
+
+.footer-section p {
+    background-color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    font-weight: 500;
+}
+
+.email-link {
+    background-color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    text-decoration: none;
+    color: black;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.social-links {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.social-link {
+    background-color: white;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: black;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    font-size: 20px;
+}
+
+.social-link .fa-facebook-f {
+    font-size: 18px;
+}
+
+.social-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: #93d9e2;
+}
+
+/* ========================================
+   RESPONSIVE DESIGN - LARGE TABLETS
+   ======================================== */
+@media (max-width: 1024px) {
+    .section-title {
+        font-size: 2rem;
+    }
+
+    .classes-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Show carousel, hide circular layout */
+    .instruments-showcase {
+        display: none !important;
+    }
+
+    .instruments-simple-list {
+        display: block;
+    }
+
+    .carousel-card {
+        padding: 40px 30px 30px;
+    }
+
+    .carousel-image-container {
+        height: 280px;
+        max-width: 320px;
+    }
+
+    .carousel-instrument-name {
+        font-size: 1.4rem;
+    }
+}
+
+/* ========================================
+   RESPONSIVE DESIGN - SMALL TABLETS
+   ======================================== */
+@media (max-width: 900px) {
+    .classes-section {
+        margin: 40px auto 60px;
+    }
+
+    .classes-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .section-title {
+        font-size: 1.8rem;
+    }
+}
+
+/* ========================================
+   RESPONSIVE DESIGN - MOBILE
+   ======================================== */
+@media (max-width: 768px) {
+    body {
+        padding-top: 60px;
+    }
+
+    header {
+        height: auto;
+        min-height: 60px;
+    }
+
+    .menu {
+        flex-wrap: wrap;
+        padding: 10px;
+        justify-content: center;
+    }
+
+    .menu a {
+        width: 100%;
+        text-align: center;
+    }
+
+    .menu ul {
+        width: 100%;
+        justify-content: center;
+        margin: 10px 0;
+    }
+
+    .menu ul > li > a {
+        padding: 10px 15px;
+        font-size: 14px;
+        transition: color 180ms ease-in-out, font-size 180ms ease-in-out, padding 180ms ease-in-out;
+    }
+
+    .menu ul > li > a:hover,
+    .menu ul > li > a:focus {
+        font-size: 15px;
+        padding: 10px 18px;
+    }
+
+    .menu a > img {
+        height: 40px;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .section-label {
+        font-size: 0.75rem;
+        letter-spacing: 1px;
+    }
+
+    .section-title {
+        font-size: 1.6rem;
+    }
+
+    .classes-section {
+        margin: 30px auto 50px;
+    }
+
+    .class-card {
+        padding: 28px 20px;
+    }
+
+    .card-icon {
+        width: 56px;
+        height: 56px;
+    }
+
+    .card-icon i {
+        font-size: 26px;
+    }
+
+    .card-content h3 {
+        font-size: 1.1rem;
+    }
+
+    .card-content p {
+        font-size: 0.85rem;
+    }
+
+    .carousel-card {
+        padding: 30px 20px 25px;
+    }
+
+    .carousel-image-container {
+        height: 260px;
+        max-width: 280px;
+    }
+
+    .carousel-instrument-name {
+        font-size: 1.3rem;
+    }
+
+    footer {
+        flex-direction: column;
+        gap: 25px;
+        padding: 30px 20px;
+        min-height: auto;
+    }
+
+    .footer-section,
+    .footer-section:first-child,
+    .footer-section:nth-child(2),
+    .footer-section:last-child {
+        position: static;
+        transform: none;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .social-links {
+        gap: 30px;
+    }
+
+    .email-link {
+        padding: 8px 15px;
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+    }
+
+    .footer-section p {
+        width: 100%;
+        max-width: 200px;
+        text-align: center;
+    }
+}
+
+/* ========================================
+   RESPONSIVE DESIGN - SMALL MOBILE
+   ======================================== */
+@media (max-width: 480px) {
+    .section-title {
+        font-size: 1.4rem;
+    }
+
+    .classes-section {
+        margin: 25px auto 40px;
+    }
+
+    .carousel-card {
+        padding: 25px 18px 20px;
+    }
+
+    .carousel-image-container {
+        height: 220px;
+        max-width: 240px;
+    }
+
+    .carousel-instrument-name {
+        font-size: 1.15rem;
+        min-height: 35px;
+    }
+
+    .carousel-dot {
+        width: 6px;
+        height: 6px;
+    }
+
+    .carousel-dot.active {
+        width: 20px;
+    }
+
+    footer {
+        padding: 25px 15px;
+    }
+
+    .social-links {
+        gap: 20px;
+    }
+
+    .social-link {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+
+    .email-link {
+        font-size: 12px;
+    }
+
+    .footer-section p {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+}

@@ -1,4 +1,6 @@
-/* Reset básico */
+/* ========================================
+   RESET AND BASE STYLES
+   ======================================== */
 * {
     margin: 0;
     padding: 0;
@@ -12,7 +14,9 @@ body {
     background-color: #f5f5f5;
 }
 
-/* Sidebar */
+/* ========================================
+   SIDEBAR
+   ======================================== */
 .sidebar {
     width: 220px;
     background: #fff;
@@ -71,7 +75,9 @@ body {
     opacity: 0;
 }
 
-/* Conteúdo */
+/* ========================================
+   MAIN CONTENT AREA
+   ======================================== */
 .content {
     flex: 1;
     padding: 20px;
@@ -144,7 +150,9 @@ body {
     color: #fff;
 }
 
-/* Grid de produtos */
+/* ========================================
+   PRODUTOS GRID
+   ======================================== */
 .produtos-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -195,7 +203,9 @@ body {
     background: #fafafa;
 }
 
-/* Paginação */
+/* ========================================
+   PAGINATION
+   ======================================== */
 .pagination {
     display: flex;
     justify-content: center;
@@ -226,13 +236,18 @@ body {
     font-size: 14px;
 }
 
-/* Responsividade */
+/* ========================================
+   RESPONSIVE DESIGN - LARGE TABLETS
+   ======================================== */
 @media (max-width: 1200px) {
     .produtos-grid {
         grid-template-columns: repeat(3, 1fr);
     }
 }
 
+/* ========================================
+   RESPONSIVE DESIGN - SMALL TABLETS
+   ======================================== */
 @media (max-width: 900px) {
     .produtos-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -249,6 +264,9 @@ body {
     }
 }
 
+/* ========================================
+   RESPONSIVE DESIGN - MOBILE
+   ======================================== */
 @media (max-width: 600px) {
     .produtos-grid {
         grid-template-columns: 1fr;

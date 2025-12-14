@@ -1,60 +1,118 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Núbia Rocha - Início</title>
-        <link rel="stylesheet" href="/style/style.css">
-    </head>
 
-    <body> 
-        <header>
-            <div class="menu">
-                <a href="/index.html">
-                    <img id="logo" src="/images/logotipo.png"/>
-                </a>
-                <ul>
-                    <li><a href="/aulas.html">Aulas</a></li>
-                    <li><a href="/produtos.html">Produtos</a></li>
-                    <li><a href="/local.html">Local</a></li>
-                    <li><a href="/sobre.html">Sobre</a></li>
-                </ul>
-            </div>
-        </header>
+<head>
+    <link rel="icon" type="image/svg+xml" href="images/logo-vetorizada-nobg.svg">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Início</title>
+    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
 
-        <section class="hero">
-            <h1>ESCOLA DE MÚSICA</h1>
-        </section>
-
-        <section class="second">
-            <h2>MELHOR ESCOLA!!!</h2>
-            <p>Onde a paixão pela música se transforma em aprendizado</p>
-
-            </br>
-
-            <div class="info">
-                <div class="coluna">
-                    <p class="dado">2017</p>
-                    <p class="nome">Desde</p>
-                </div>
-                <div class="coluna">
-                    <p class="dado">200+</p>
-                    <p class="nome">Alunos</p>
-                </div>
-                <div class="coluna">
-                    <p class="dado">300+</p>
-                    <p class="nome">Aulas</p>
-                </div>
-            </div>
-        </section>
-
-        <footer>
-            <p><b>Contatos:</b></p>
+<body>
+    <header>
+        <div class="menu">
+            <a href="index.html">
+                <img id="logo" src="images/logotipo.png" alt="Núbia Rocha Logo" />
+            </a>
             <ul>
-                <li>nubiarochaescolademusica@gmail.com</li>
-                <li> <a href="https://api.whatsapp.com/send/?phone=5538991928407&text&type=phone_number&app_absent=0">(38) 99192-8407</a></li>
-                <li> <a href="https://www.instagram.com/nubiarochaescolademusica?utm_source=ig_web_button_share_sheet&igsh=MXZiZm01dmZ0b2EzeA==">@nubiarochaescolademusica</li>
+                <li><a href="aulas">Aulas</a></li>
+                <li><a href="produtos">Produtos</a></li>
+                <li><a href="local">Local</a></li>
+                <li><a href="sobre">Sobre</a></li>
             </ul>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="content-container">
+            <h1>ESCOLA DE MÚSICA</h1>
+            <div class="second">
+                <br>
+                <p>Onde a <b>paixão</b> pela música vira <b>aprendizado</b>, e o aprendizado vira <b>arte</b>.
+                    Aqui, cada <b>nota</b> é um passo rumo ao seu <b><u>sonho</u></b>. <br>Um lugar onde o <b><u>som
+                            ganha vida</u></b> e você não apenas aprende música — <b>você vive música.</b></p>
+                <div class="button-container">
+                    <a href="https://google.com" class="cta-button">Agende uma aula</a>
+                    <a href="./produtos" class="cta-button">Compre um instrumento</a>
+                </div>
+                <div class="info">
+                    <div class="coluna">
+                        <p class="dado">2017</p>
+                        <p class="nome">Desde</p>
+                    </div>
+                    <div class="coluna">
+                        <p class="dado count" data-target="200">150+</p>
+                        <p class="nome">Alunos</p>
+                    </div>
+                    <div class="coluna">
+                        <p class="dado count" data-target="300">150+</p>
+                        <p class="nome">Aulas</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <img src="images/violao.svg" alt="Violão" class="hero-guitar">
+    </section>
+    <br><br><br><br><br>
+    <footer>
+        <div class="footer-section">
+            <p><i class="far fa-copyright"></i> Núbia Rocha</p>
+        </div>
+        <div class="footer-section">
+            <div class="social-links">
+                <a href="https://api.whatsapp.com/send/?phone=5538991928407&text&type=phone_number&app_absent=0"
+                    class="social-link" aria-label="WhatsApp">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+                <a href="https://www.instagram.com/nubiarochaescolademusica?utm_source=ig_web_button_share_sheet&igsh=MXZiZm01dmZ0b2EzeA=="
+                    class="social-link" aria-label="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://www.facebook.com/MusicaDosSonhos" class="social-link" aria-label="Facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="footer-section">
+            <a href="mailto:nubiarochaescolademusica@gmail.com" class="email-link">
+                <i class="far fa-envelope"></i>
+                nubiarochaescolademusica@gmail.com
+            </a>
+        </div>
         </footer>
-    </body>
-</html>
+        <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const counters = document.querySelectorAll('.count');
+
+            counters.forEach(counter => {
+                const target = +counter.dataset.target;
+                let startTime = null;
+                const duration = 2000; // ms
+
+                function animateCount(timestamp) {
+                    if (!startTime) startTime = timestamp;
+                    const elapsed = timestamp - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+
+                    const value = Math.floor(eased * target);
+                    counter.textContent = value;
+
+                    if (progress < 1) {
+                        requestAnimationFrame(animateCount);
+                    } else {
+                        counter.textContent = target;
+                        counter.classList.add('done'); // triggers "+" fade-in
+                    }
+                }
+
+                requestAnimationFrame(animateCount);
+            });
+        });
+        </script>
+
+        </html>

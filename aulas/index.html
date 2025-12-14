@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <link rel="icon" type="image/svg+xml" href="../images/logo-vetorizada-nobg.svg">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Aulas</title>
+        <link rel="stylesheet" href="../style/style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    </head>
+    <body class="aulas-page">
+        <header>
+            <div class="menu">
+                <a href="/" aria-label="Página inicial">
+                    <img id="logo" src="../images/logotipo.png" alt="Logotipo Núbia Rocha" />
+                </a>
+                <ul>
+                    <li><a href="../aulas">Aulas</a></li>
+                    <li><a href="../produtos">Produtos</a></li>
+                    <li><a href="../local">Local</a></li>
+                    <li><a href="../sobre">Sobre</a></li>
+                </ul>
+            </div>
+        </header>
+
+        <!-- Classes Section -->
+        <section class="classes-section">
+            <div class="section-header">
+                <h2 class="section-title">Aulas Disponíveis</h2>
+            </div>
+            
+            <div class="classes-grid">
+                <div class="class-card" data-category="vocal">
+                    <div class="card-icon">
+                        <i class="fas fa-microphone-alt"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Canto / Técnica Vocal</h3>
+                        <p>Aprenda respiração, projeção, afinação e interpretação. Descubra como usar sua voz de forma plena e expressiva através de exercícios especializados de técnica vocal.</p>
+                    </div>
+                    <div class="card-hover-effect"></div>
+                </div>
+
+                <div class="class-card" data-category="theory">
+                    <div class="card-icon">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Teoria Musical</h3>
+                        <p>Entenda como a música funciona. Aprenda leitura de partituras, ritmos, escalas e harmonia, adquirindo ferramentas essenciais para interpretar, compor e se expressar com liberdade.</p>
+                    </div>
+                    <div class="card-hover-effect"></div>
+                </div>
+
+                <div class="class-card" data-category="kids">
+                    <div class="card-icon">
+                        <i class="fas fa-child"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Musicalização Infantil</h3>
+                        <p>Estimule a sensibilidade e criatividade das crianças através de jogos, canções e instrumentos. Desenvolva coordenação, memória, atenção e socialização de forma lúdica.</p>
+                    </div>
+                    <div class="card-hover-effect"></div>
+                </div>
+
+                <div class="class-card" data-category="literacy">
+                    <div class="card-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Alfabetização Musical</h3>
+                        <p>Aprenda a ler e escrever sons, ritmos e melodias. Domine partituras, símbolos e valores musicais através de atividades práticas, conquistando autonomia musical.</p>
+                    </div>
+                    <div class="card-hover-effect"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Instruments Section -->
+        <section class="instruments-section">
+            <div class="instruments-header">
+                <span class="section-label">Aprenda a Tocar</span>
+                <h2 class="section-title">Instrumentos Disponíveis</h2>
+            </div>
+            
+            <!-- Simple carousel for mobile/tablet -->
+            <div class="instruments-simple-list" id="instrumentsSimpleList">
+                <div class="carousel-card">
+                    <div class="carousel-image-container" id="carouselImageContainer">
+                        <img id="carouselImage" src="" alt="" />
+                    </div>
+                    <div class="carousel-instrument-name" id="carouselInstrumentName">
+                        Órgão Eletrônico
+                    </div>
+                    <div class="carousel-dots" id="carouselDots"></div>
+                </div>
+            </div>
+            
+            <!-- Circular layout for desktop -->
+            <div class="instruments-showcase" id="instrumentsShowcase">
+                <div class="circular-layout" id="circularLayout">
+                    <!-- Center image container: images from ../images will be shown here on hover -->
+                    <div class="image-center" id="centerImageContainer" aria-hidden="true">
+                        <img id="centerImage" src="" alt="" />
+                    </div>
+                    <div class="stadium-container"><div class="stadium"></div></div>
+                    <div id="instrumentsList" class="instruments-list" role="list" aria-label="Instrumentos"></div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="footer-section">
+                <p><i class="far fa-copyright"></i> Núbia Rocha</p>
+            </div>
+            <div class="footer-section">
+                <div class="social-links">
+                    <a href="https://api.whatsapp.com/send/?phone=5538991928407&text&type=phone_number&app_absent=0" class="social-link" aria-label="WhatsApp">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a href="https://www.instagram.com/nubiarochaescolademusica?utm_source=ig_web_button_share_sheet&igsh=MXZiZm01dmZ0b2EzeA==" class="social-link" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.facebook.com/MusicaDosSonhos" class="social-link" aria-label="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <a href="mailto:nubiarochaescolademusica@gmail.com" class="email-link">
+                    <i class="far fa-envelope"></i>
+                    nubiarochaescolademusica@gmail.com
+                </a>
+            </div>
+        </footer>
+
+        <script>
+            const instruments = [
+                'Flauta Transversal', 'Flauta Doce', 'Bateria', 'Teclado', 'Saxofone',
+                'Ukulele', 'Violino', 'Piano', 'Violão', 'Órgão Eletrônico'
+            ];
+
+            const instrumentImageMap = {
+                'orgao-eletronico': 'orgao-eletronico.png',
+                'orgao eletronico': 'orgao-eletronico.png',
+                'violao': 'violao.png'
+            };
+
+            function normalizeKey(name) {
+                return name
+                    .toLowerCase()
+                    .normalize('NFD')
+                    .replace(/\p{Diacritic}/gu, '')
+                    .replace(/[^a-z0-9 ]/g, '')
+                    .trim();
+            }
+
+            function catmullRomToBezier(points) {
+                if (points.length < 2) return '';
+                const d = [`M ${points[0][0]} ${points[0][1]}`];
+                
+                for (let i = 0; i < points.length - 1; i++) {
+                    const p0 = i === 0 ? points[i] : points[i - 1];
+                    const p1 = points[i];
+                    const p2 = points[i + 1];
+                    const p3 = (i + 2 < points.length) ? points[i + 2] : p2;
+                    
+                    const cp1x = p1[0] + (p2[0] - p0[0]) / 6;
+                    const cp1y = p1[1] + (p2[1] - p0[1]) / 6;
+                    const cp2x = p2[0] - (p3[0] - p1[0]) / 6;
+                    const cp2y = p2[1] - (p3[1] - p1[1]) / 6;
+                    
+                    d.push(`C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p2[0]} ${p2[1]}`);
+                }
+                
+                return d.join(' ');
+            }
+
+            function showCenterImageFor(instrumentName) {
+                const key = normalizeKey(instrumentName);
+                const file = instrumentImageMap[key] || instrumentImageMap[key.replace(/ /g, '-')];
+                const container = document.getElementById('centerImageContainer');
+                const img = document.getElementById('centerImage');
+                if (!container || !img) return;
+
+                // track pending swap so rapid hover changes don't race
+                if (!showCenterImageFor._state) showCenterImageFor._state = { pendingTimeout: null, pendingFile: null };
+                const state = showCenterImageFor._state;
+
+                if (!file) {
+                    // No mapped file: nothing to show. Caller may decide to hide.
+                    return null;
+                }
+
+                const newSrc = '../images/' + file;
+                const fadeMs = 110; // keep sync with CSS .image-center transition
+
+                // Helper to check if the currently loaded image already matches the requested file
+                const currentMatches = img.src && img.src.indexOf(file) !== -1;
+
+                if (currentMatches) {
+                    // already showing the right image — ensure visible
+                    container.classList.add('visible');
+                    container.setAttribute('aria-hidden', 'false');
+                    img.alt = instrumentName;
+                    return;
+                }
+
+                // If the container is visible, fade out, change src, then fade in
+                // clear any pending swap
+                if (state.pendingTimeout) {
+                    clearTimeout(state.pendingTimeout);
+                    state.pendingTimeout = null;
+                }
+                state.pendingFile = file;
+
+                if (container.classList.contains('visible')) {
+                    // fade out, then swap src and fade in
+                    container.classList.remove('visible');
+                    state.pendingTimeout = setTimeout(() => {
+                        // if a newer request arrived, only proceed if it matches
+                        if (state.pendingFile !== file) return;
+                        img.src = newSrc;
+                        img.alt = instrumentName;
+                        // small timeout to ensure src took effect before fading in
+                        requestAnimationFrame(() => {
+                            requestAnimationFrame(() => {
+                                container.classList.add('visible');
+                                container.setAttribute('aria-hidden', 'false');
+                                state.pendingTimeout = null;
+                            });
+                        });
+                    }, fadeMs);
+                } else {
+                    // not visible: just set and show immediately
+                    img.src = newSrc;
+                    img.alt = instrumentName;
+                    container.classList.add('visible');
+                    container.setAttribute('aria-hidden', 'false');
+                }
+            }
+
+            function hideCenterImage() {
+                const container = document.getElementById('centerImageContainer');
+                if (!container) return;
+                
+                container.classList.remove('visible');
+                container.setAttribute('aria-hidden', 'true');
+            }
+
+            // Autoplay state
+            let autoplayIntervalId = null;
+            let autoplayDelay = 2200; // ms between switches
+            let activeIndex = -1;
+            let labelNodes = [];
+
+            function stopAutoplay() {
+                if (autoplayIntervalId !== null) {
+                    clearInterval(autoplayIntervalId);
+                    autoplayIntervalId = null;
+                }
+            }
+
+            function startAutoplay() {
+                stopAutoplay();
+                // Show starting image immediately
+                autoplayIntervalId = setInterval(() => {
+                    // move counterclockwise: decrement index
+                    if (labelNodes.length === 0) return;
+                    activeIndex = (activeIndex - 1 + labelNodes.length) % labelNodes.length;
+                    setActiveInstrument(activeIndex, { source: 'autoplay' });
+                }, autoplayDelay);
+            }
+
+            function setActiveInstrument(index, opts = { source: 'autoplay' }) {
+                // remove previous active class
+                labelNodes.forEach((n, i) => n.classList.toggle('active', i === index));
+                const instrumentName = instruments[index];
+
+                // Determine if there's a mapped image for this instrument.
+                const key = normalizeKey(instrumentName);
+                const file = instrumentImageMap[key] || instrumentImageMap[key.replace(/ /g, '-')];
+
+                // Behavior differs by source:
+                // - hover/focus/touch: if there is an image -> show it; if not -> keep current image
+                // - autoplay (or init): if there is an image -> show it; if not -> hide (to allow in/out animation)
+                if (file) {
+                    showCenterImageFor(instrumentName);
+                } else if (opts && opts.source === 'autoplay') {
+                    hideCenterImage();
+                } else {
+                    // hover/touch/focus and no image: do nothing (keep current image)
+                }
+            }
+
+            function setupAutoplayBindings() {
+                // Called after labels are rendered. Rebinds labelNodes and restarts autoplay.
+                const layout = document.getElementById('circularLayout');
+                const container = document.getElementById('instrumentsList');
+                if (!container || !layout) return;
+
+                // collect labels
+                labelNodes = Array.from(container.querySelectorAll('.instrument-text'));
+                if (labelNodes.length === 0) return;
+
+                // find index of Órgão Eletrônico (normalize keys to be safe)
+                const startKey = normalizeKey('Órgão Eletrônico');
+                const startIndex = instruments.findIndex(i => normalizeKey(i) === startKey);
+                // If not found, start from last element
+                activeIndex = (startIndex >= 0) ? startIndex : (labelNodes.length - 1);
+
+                // labelNodes already have event listeners attached in buildCircularLayout
+                // (we only need to collect them here and compute the starting index)
+
+
+                // Do NOT pause on hovering the whole layout — only pause on the specific instrument labels.
+                // The individual label listeners above handle pausing/resuming autoplay.
+
+                // set current active and start autoplay
+                setActiveInstrument(activeIndex);
+                // small delay before starting cycle so first image is visible
+                setTimeout(() => startAutoplay(), 900);
+            }
+
+            function buildCircularLayout() {
+                const layout = document.getElementById('circularLayout');
+                if (!layout) return;
+                
+                const container = document.getElementById('instrumentsList');
+                container.innerHTML = '';
+                layout.querySelector('#dotsLayer')?.remove();
+                layout.querySelector('#dotsSvg')?.remove();
+
+                const rect = layout.getBoundingClientRect();
+                const centerX = rect.width / 2;
+                const stadiumRect = layout.querySelector('.stadium-container')?.getBoundingClientRect();
+                const centerY = stadiumRect 
+                    ? ((stadiumRect.top - rect.top) + stadiumRect.height / 2)
+                    : rect.height / 2;
+                
+                const capsuleRoundness = stadiumRect ? stadiumRect.height / 2 : Math.min(rect.width, rect.height) * 0.36;
+                const finalRadius = Math.min(capsuleRoundness + Math.min(rect.width * 0.08, 40), Math.min(rect.width, rect.height) * 0.48);
+                const startAngle = -0.12 * Math.PI;
+                const endAngle = Math.PI + 0.12 * Math.PI;
+                const angleStep = (endAngle - startAngle) / (instruments.length - 1);
+                const points = [];
+
+                // Create dots layer
+                const dotsLayer = document.createElement('div');
+                dotsLayer.id = 'dotsLayer';
+                Object.assign(dotsLayer.style, {
+                    position: 'absolute',
+                    left: '0',
+                    top: '0',
+                    width: '100%',
+                    height: '100%',
+                    pointerEvents: 'none'
+                });
+                layout.appendChild(dotsLayer);
+
+                instruments.forEach((instrument, i) => {
+                    const angle = startAngle + angleStep * i;
+                    const x = centerX + finalRadius * Math.cos(angle);
+                    const y = centerY + finalRadius * Math.sin(angle);
+                    const cosA = Math.cos(angle);
+
+                    // Create label
+                    const label = document.createElement('div');
+                    label.className = 'instrument-text';
+                    label.setAttribute('tabindex', '0');
+                    
+                    const inner = document.createElement('span');
+                    inner.className = 'instrument-text-inner';
+                    inner.textContent = instrument;
+                    label.appendChild(inner);
+
+                    const nodeRadius = 13;
+                    const labelOffset = Math.min(Math.max(7, rect.width * 0.02), Math.min(rect.width * 0.05, 40));
+                    const labelRadius = finalRadius + labelOffset + nodeRadius;
+                    const labelX = centerX + labelRadius * Math.cos(angle);
+                    const labelY = centerY + labelRadius * Math.sin(angle);
+                    
+                    label.style.left = labelX + 'px';
+                    label.style.top = labelY + 'px';
+
+                    if (Math.abs(cosA) < 0.18) {
+                        label.style.transform = 'translate(-50%, -50%)';
+                        label.style.textAlign = 'center';
+                    } else if (cosA < 0) {
+                        label.style.transform = 'translate(-100%, -50%)';
+                        label.style.textAlign = 'right';
+                    } else {
+                        label.style.transform = 'translate(0, -50%)';
+                        label.style.textAlign = 'left';
+                    }
+
+                    // Add event listeners (they will also pause autoplay when used)
+                    // Use setActiveInstrument so label visual state and image logic stay consistent.
+                    label.addEventListener('mouseenter', () => { stopAutoplay(); setActiveInstrument(i, { source: 'hover' }); });
+                    // Do NOT hide the center image on mouseleave — just resume autoplay after a short delay.
+                    label.addEventListener('mouseleave', () => { setTimeout(() => startAutoplay(), 400); });
+                    label.addEventListener('focus', () => { stopAutoplay(); setActiveInstrument(i, { source: 'hover' }); });
+                    // Do NOT hide the center image on blur — just resume autoplay after a short delay.
+                    label.addEventListener('blur', () => { setTimeout(() => startAutoplay(), 400); });
+                    label.addEventListener('touchstart', (ev) => {
+                        ev.stopPropagation();
+                        const imgContainer = document.getElementById('centerImageContainer');
+                        if (imgContainer?.classList.contains('visible')) {
+                            hideCenterImage();
+                        } else {
+                            stopAutoplay();
+                            setActiveInstrument(i, { source: 'touch' });
+                        }
+                    }, { passive: true });
+
+                    container.appendChild(label);
+
+                    // Create node dot
+                    const nodeDot = document.createElement('div');
+                    nodeDot.className = 'node-dot';
+                    nodeDot.style.left = x + 'px';
+                    nodeDot.style.top = y + 'px';
+                    nodeDot.style.transform = 'translate(-50%, -50%)';
+                    dotsLayer.appendChild(nodeDot);
+
+                    points.push([x, y]);
+                });
+
+                // Create SVG path
+                if (points.length > 1) {
+                    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                    svg.id = 'dotsSvg';
+                    svg.setAttribute('width', rect.width);
+                    svg.setAttribute('height', rect.height);
+                    svg.setAttribute('viewBox', `0 0 ${rect.width} ${rect.height}`);
+                    Object.assign(svg.style, {
+                        position: 'absolute',
+                        left: '0',
+                        top: '0',
+                        pointerEvents: 'none',
+                        zIndex: '1'
+                    });
+
+                    const pathData = catmullRomToBezier(points);
+                    if (pathData) {
+                        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        path.setAttribute('d', pathData);
+                        path.setAttribute('fill', 'none');
+                        path.setAttribute('stroke', '#e6e6e6');
+                        path.setAttribute('stroke-width', '4');
+                        path.setAttribute('stroke-linecap', 'round');
+                        path.setAttribute('stroke-linejoin', 'round');
+                        svg.appendChild(path);
+                    }
+                    
+                    layout.appendChild(svg);
+                }
+
+                // After DOM creation for labels, setup autoplay bindings
+                setupAutoplayBindings();
+            }
+
+            // Helper to check if we should use circular layout (desktop only)
+            function shouldUseCircularLayout() {
+                return window.innerWidth > 1024;
+            }
+
+            // Carousel functionality for mobile/tablet
+            let carouselIntervalId = null;
+            let currentCarouselIndex = 9; // Start with Órgão Eletrônico (last item)
+            const carouselDelay = 2500;
+
+            function initCarousel() {
+                const dotsContainer = document.getElementById('carouselDots');
+                if (!dotsContainer) return;
+
+                // Create dots
+                dotsContainer.innerHTML = '';
+                instruments.forEach((_, index) => {
+                    const dot = document.createElement('div');
+                    dot.className = 'carousel-dot';
+                    if (index === currentCarouselIndex) {
+                        dot.classList.add('active');
+                    }
+                    dot.addEventListener('click', () => {
+                        stopCarousel();
+                        setCarouselItem(index);
+                        setTimeout(() => startCarousel(), 3000);
+                    });
+                    dotsContainer.appendChild(dot);
+                });
+
+                // Set initial item
+                setCarouselItem(currentCarouselIndex);
+                startCarousel();
+            }
+
+            function setCarouselItem(index) {
+                currentCarouselIndex = index;
+                const instrumentName = instruments[index];
+                const nameElement = document.getElementById('carouselInstrumentName');
+                const imageElement = document.getElementById('carouselImage');
+                const imageContainer = document.getElementById('carouselImageContainer');
+
+                if (nameElement) {
+                    nameElement.textContent = instrumentName;
+                }
+
+                // Update dots
+                const dots = document.querySelectorAll('.carousel-dot');
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === index);
+                });
+
+                // Update image if available
+                if (imageElement && imageContainer) {
+                    const key = normalizeKey(instrumentName);
+                    const file = instrumentImageMap[key] || instrumentImageMap[key.replace(/ /g, '-')];
+                    
+                    if (file) {
+                        // Fade out current image
+                        imageElement.classList.remove('active');
+                        
+                        setTimeout(() => {
+                            imageElement.src = '../images/' + file;
+                            imageElement.alt = instrumentName;
+                            // Fade in new image
+                            requestAnimationFrame(() => {
+                                imageElement.classList.add('active');
+                            });
+                        }, 200);
+                    } else {
+                        imageElement.classList.remove('active');
+                    }
+                }
+            }
+
+            function startCarousel() {
+                stopCarousel();
+                carouselIntervalId = setInterval(() => {
+                    currentCarouselIndex = (currentCarouselIndex - 1 + instruments.length) % instruments.length;
+                    setCarouselItem(currentCarouselIndex);
+                }, carouselDelay);
+            }
+
+            function stopCarousel() {
+                if (carouselIntervalId !== null) {
+                    clearInterval(carouselIntervalId);
+                    carouselIntervalId = null;
+                }
+            }
+
+            // Initialize on load and resize
+            window.addEventListener('load', () => {
+                if (shouldUseCircularLayout()) {
+                    buildCircularLayout();
+                } else {
+                    initCarousel();
+                }
+            });
+            
+            let resizeTimer;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => {
+                    if (shouldUseCircularLayout()) {
+                        stopCarousel();
+                        buildCircularLayout();
+                    } else {
+                        stopAutoplay();
+                        initCarousel();
+                    }
+                }, 120);
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <link rel="icon" type="image/svg+xml" href="../images/logo-vetorizada-nobg.svg">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Local</title>
+        <link rel="stylesheet" href="../style/style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    </head>
+
+    <body>
+        <header>
+            <div class="menu">
+                <a href="/">
+                    <img id="logo" src="../images/logotipo.png"/>
+                </a>
+                <ul>
+                    <li><a href="../aulas">Aulas</a></li>
+                    <li><a href="../produtos">Produtos</a></li>
+                    <li><a href="../local">Local</a></li>
+                    <li><a href="../sobre">Sobre</a></li>
+                </ul>
+            </div>
+        </header>
+
+        <section class="infraestrutura">
+            <div class="infra-header">
+                <h2>CONHEÇA NOSSA INFRAESTRUTURA</h2>
+                <p class="infra-subtitle">Ambientes especialmente projetados para proporcionar a melhor experiência musical</p>
+            </div>
+
+            <div class="infra-main">
+                <div class="carousel-wrapper">
+                    <div class="carousel">
+                        <div class="carousel-images">
+                            <img src="../images/sala-de-bateria.jpg" alt="Sala de bateria">
+                            <img src="../images/sala-de-cordas.jpg" alt="Sala de cordas">
+                            <img src="../images/sala-de-sopro.jpg" alt="Sala de sopro">
+                            <img src="../images/sala-expositiva.jpg" alt="Sala expositiva">
+                            <img src="../images/sala-de-piano.jpg" alt="Sala de piano">
+                            <img src="../images/sala-de-tecnica-vocal.jpg" alt="Sala de técnica vocal">
+                            <img src="../images/area-de-lazer.jpg" alt="Área de lazer">
+                        </div>
+                        <button class="carousel-btn prev" aria-label="Anterior">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="carousel-btn next" aria-label="Próximo">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                        <div class="carousel-dots"></div>
+                    </div>
+                </div>
+
+                <div class="infra-details">
+                    <div class="detail-header">
+                        <h3 class="infra-title">Sala de bateria</h3>
+                        <div class="slide-counter">
+                            <span class="current-slide">1</span>/<span class="total-slides">7</span>
+                        </div>
+                    </div>
+                    
+                    <p class="infra-description">
+                        Espaço dedicado à prática de bateria e percussão, com tratamento acústico profissional 
+                        e equipamentos de alta qualidade para o desenvolvimento técnico do aluno.
+                    </p>
+
+                    <div class="infra-features">
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fa-solid fa-volume-high"></i>
+                            </div>
+                            <div class="feature-content">
+                                <h4>Isolamento Acústico</h4>
+                                <p>Tratamento profissional</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fa-solid fa-users"></i>
+                            </div>
+                            <div class="feature-content">
+                                <h4>Aulas Personalizadas</h4>
+                                <p>Individual ou dupla</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fa-solid fa-guitar"></i>
+                            </div>
+                            <div class="feature-content">
+                                <h4>Equipamentos</h4>
+                                <p>Instrumentos de qualidade</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fa-solid fa-clock"></i>
+                            </div>
+                            <div class="feature-content">
+                                <h4>Horários Flexíveis</h4>
+                                <p>Manhã, tarde e noite</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="footer-section">
+                <p><i class="far fa-copyright"></i> Núbia Rocha</p>
+            </div>
+            <div class="footer-section">
+                <div class="social-links">
+                    <a href="https://api.whatsapp.com/send/?phone=5538991928407&text&type=phone_number&app_absent=0"
+                        class="social-link" aria-label="WhatsApp">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a href="https://www.instagram.com/nubiarochaescolademusica?utm_source=ig_web_button_share_sheet&igsh=MXZiZm01dmZ0b2EzeA=="
+                        class="social-link" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.facebook.com/MusicaDosSonhos" class="social-link" aria-label="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <a href="mailto:nubiarochaescolademusica@gmail.com" class="email-link">
+                    <i class="far fa-envelope"></i>
+                    nubiarochaescolademusica@gmail.com
+                </a>
+            </div>
+        </footer>
+
+        <script>
+            let index = 0;
+            const images = document.querySelectorAll('.carousel-images img');
+            const total = images.length;
+            const container = document.querySelector('.carousel-images');
+            const title = document.querySelector('.infra-title');
+            const description = document.querySelector('.infra-description');
+            const currentSlideEl = document.querySelector('.current-slide');
+            const totalSlidesEl = document.querySelector('.total-slides');
+            const dotsContainer = document.querySelector('.carousel-dots');
+
+            // Dados de cada sala
+            const roomsData = [
+                {
+                    title: "Sala de bateria",
+                    description: "Espaço dedicado à prática de bateria e percussão, com tratamento acústico profissional e equipamentos de alta qualidade para o desenvolvimento técnico do aluno."
+                },
+                {
+                    title: "Sala de cordas",
+                    description: "Ambiente preparado para violão, guitarra, baixo e outros instrumentos de cordas, com amplificadores e recursos para aulas individuais e em grupo."
+                },
+                {
+                    title: "Sala de sopro",
+                    description: "Espaço especialmente projetado para instrumentos de sopro como flauta, saxofone, clarinete e trompete, com acústica adequada e suportes para partituras."
+                },
+                {
+                    title: "Sala expositiva",
+                    description: "Local para apresentações, recitais e eventos musicais, equipado com sistema de som profissional e iluminação adequada para performances."
+                },
+                {
+                    title: "Sala de piano",
+                    description: "Sala exclusiva com piano acústico e digital, ideal para aulas de piano e teclado, proporcionando um ambiente tranquilo e focado no aprendizado."
+                },
+                {
+                    title: "Sala de técnica vocal",
+                    description: "Espaço otimizado para aulas de canto, com espelho de corpo inteiro, equipamento de áudio e tratamento acústico para desenvolvimento da técnica vocal."
+                },
+                {
+                    title: "Espaço de lazer",
+                    description: "Área de convivência para os alunos relaxarem entre as aulas, trocarem experiências musicais e criarem conexões com outros músicos da escola."
+                }
+            ];
+
+            // Define total de slides
+            totalSlidesEl.textContent = total;
+
+            // Cria os pontos indicadores
+            for (let i = 0; i < total; i++) {
+                const dot = document.createElement('span');
+                dot.classList.add('dot');
+                dot.addEventListener('click', () => {
+                    index = i;
+                    showSlide(index);
+                });
+                dotsContainer.appendChild(dot);
+            }
+
+            const dots = document.querySelectorAll('.dot');
+
+            function showSlide(i) {
+                if (i >= total) index = 0;
+                if (i < 0) index = total - 1;
+                
+                container.style.transform = `translateX(${-index * 100}%)`;
+
+                // Atualiza informações da sala
+                title.textContent = roomsData[index].title;
+                description.textContent = roomsData[index].description;
+                currentSlideEl.textContent = index + 1;
+
+                // Atualiza os pontos indicadores
+                dots.forEach((dot, idx) => {
+                    dot.classList.toggle('active', idx === index);
+                });
+            }
+
+            document.querySelector('.next').addEventListener('click', () => {
+                index++;
+                showSlide(index);
+            });
+
+            document.querySelector('.prev').addEventListener('click', () => {
+                index--;
+                showSlide(index);
+            });
+
+            // Auto-play opcional (descomente se desejar)
+            // setInterval(() => {
+            //     index++;
+            //     showSlide(index);
+            // }, 5000);
+
+            // Inicia no slide 0
+            showSlide(index);
+        </script>
+    </body>
+</html>

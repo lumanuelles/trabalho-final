@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <link rel="icon" type="image/svg+xml" href="../images/logo-vetorizada-nobg.svg">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produtos</title>
+    <link rel="stylesheet" href="../style/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Lottie removed. -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+        }
+
+        .produto-whatsapp-btn {
+            width: 100%;
+            height: 46px;
+            background: #25d366;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.08rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 14px;
+            transition: background 0.18s;
+            gap: 10px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+            outline: none;
+            letter-spacing: 0.1px;
+            user-select: none;
+            line-height: 1;
+            vertical-align: middle;
+        }
+
+        .produto-whatsapp-btn:hover,
+        .produto-whatsapp-btn:focus {
+            background: #1ebe5d;
+        }
+
+        .produto-whatsapp-btn i {
+            font-size: 1.25em;
+            margin-left: 8px;
+            margin-right: 0;
+            color: #fff;
+            min-width: 22px;
+            display: inline-block;
+        }
+
+        .produto-contexto {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #888;
+            margin: 6px 0 0 0;
+            font-weight: 400;
+            line-height: 1.2;
+            letter-spacing: 0.1px;
+            width: 100%;
+        }
+
+        .produto-contexto i {
+            font-size: 14px;
+            color: #b0b0b0;
+            margin-right: 2px;
+        }
+
+        .produto-info {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-top: 2px;
+            margin-bottom: 2px;
+            padding: 0 20px 20px 20px;
+        }
+
+        .produto-nome {
+            font-size: 17px;
+            font-weight: 600;
+            color: #232323;
+            margin-bottom: 2px;
+            text-align: left;
+            width: 100%;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.2;
+            min-height: 2.4em;
+            word-break: break-word;
+        }
+
+        .produto-preco {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-top: 4px;
+            margin-bottom: 0;
+            text-align: left;
+            width: 100%;
+            letter-spacing: 0.5px;
+        }
+
+        .produto-card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07), 0 1.5px 4px rgba(0, 0, 0, 0.04);
+            transition: box-shadow 0.2s ease-out, transform 0.2s ease-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 220px;
+            max-width: 260px;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.4s ease-out forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .produto-card:hover {
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.13), 0 2px 8px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .produto-imagem {
+            width: 100%;
+            aspect-ratio: 3/2;
+            background: #f3f3f3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .produto-imagem img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            background: transparent;
+        }
+
+        .produto-imagem img.produto-img-1 {
+            opacity: 1;
+            z-index: 2;
+        }
+
+        .produto-imagem img.produto-img-2 {
+            opacity: 0;
+            z-index: 1;
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            .produto-card:hover .produto-imagem img.produto-img-1 {
+                opacity: 0;
+            }
+
+            .produto-card:hover .produto-imagem img.produto-img-2 {
+                opacity: 1;
+            }
+        }
+
+        .produtos-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            align-content: center;
+            gap: 16px;
+            width: 100%;
+            min-height: 300px;
+        }
+
+        .produtos-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 300px;
+            width: 100%;
+            padding: 32px 0 0 0;
+            margin-top: 10px;
+            /* Prevent header overlap */
+            margin-bottom: 80px;
+        }
+
+        .produtos-section .produtos-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+
+        .produtos-section h2.titulo-produtos {
+            margin-bottom: 0;
+        }
+
+        .produtos-section h3 {
+            margin-bottom: 0;
+            color: #666;
+            font-weight: 400;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+        }
+
+        h3 {
+            margin-bottom: 30px;
+            color: #666;
+            font-weight: 400;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="menu">
+            <a href="/">
+                <img id="logo" src="../images/logotipo.png" />
+            </a>
+            <ul>
+                <li><a href="../aulas">Aulas</a></li>
+                <li><a href="../produtos">Produtos</a></li>
+                <li><a href="../local">Local</a></li>
+                <li><a href="../sobre">Sobre</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="produtos-section">
+        <div class="produtos-header">
+            <h2 class="titulo-produtos">PRODUTOS</h2>
+            <h3>Clique nos produtos e seja redirecionado para o nosso whatsapp para saber mais!</h3>
+        </div>
+        <div class="produtos-loading" style="display:none;justify-content:center;align-items:center;width:100%;min-height:120px;">
+            <svg id="loader" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" style="width:80px;height:80px;">
+                <!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                <path d="M64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576C178.6 576 64 461.4 64 320zM320 352C302.3 352 288 337.7 288 320C288 302.3 302.3 288 320 288C337.7 288 352 302.3 352 320C352 337.7 337.7 352 320 352zM224 320C224 373 267 416 320 416C373 416 416 373 416 320C416 267 373 224 320 224C267 224 224 267 224 320zM168 304C168 271.6 184.3 237.4 210.8 210.8C237.3 184.2 271.6 168 304 168C317.3 168 328 157.3 328 144C328 130.7 317.3 120 304 120C256.1 120 210.3 143.5 176.9 176.9C143.5 210.3 120 256.1 120 304C120 317.3 130.7 328 144 328C157.3 328 168 317.3 168 304z"/>
+            </svg>
+        </div>
+        <div class="produtos-grid">
+            <!-- Os produtos serão inseridos dinamicamente aqui -->
+        </div>
+    </section>
+
+    <script>
+        // Add spin animation to loader SVG
+        function spinLoader() {
+            const loader = document.getElementById('loader');
+            if (loader) {
+                loader.style.transition = 'transform 0.1s linear';
+                let angle = 0;
+                loader._spinInterval = setInterval(() => {
+                    angle = (angle + 6) % 360;
+                    loader.style.transform = `rotate(${angle}deg)`;
+                }, 16);
+            }
+        }
+
+        function stopSpinLoader() {
+            const loader = document.getElementById('loader');
+            if (loader && loader._spinInterval) {
+                clearInterval(loader._spinInterval);
+                loader._spinInterval = null;
+                loader.style.transform = '';
+            }
+        }
+
+        async function carregarProdutos() {
+            const grid = document.querySelector('.produtos-grid');
+            const loadingDiv = document.querySelector('.produtos-loading');
+            if (loadingDiv) {
+                loadingDiv.style.display = 'flex';
+                spinLoader();
+            }
+            grid.innerHTML = '';
+            try {
+                const resposta = await fetch('https://api-nr.vercel.app/api/produtos');
+                if (!resposta.ok) throw new Error('Erro ao buscar produtos');
+                const produtos = await resposta.json();
+                if (!Array.isArray(produtos) || produtos.length === 0) {
+                    grid.innerHTML = '<p>Não há produtos disponíveis no momento.</p>';
+                    if (loadingDiv) loadingDiv.style.display = 'none';
+                    return;
+                }
+                grid.innerHTML = '';
+                produtos.forEach((produto, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'produto-card';
+                    card.style.animationDelay = `${index * 0.08}s`;
+
+                    // Imagem
+                    const imagemDiv = document.createElement('div');
+                    imagemDiv.className = 'produto-imagem';
+
+                    let imagens = [];
+                    if (Array.isArray(produto.imagens) && produto.imagens.length > 0) {
+                        imagens = produto.imagens;
+                    } else if (produto.imagem) {
+                        imagens = [produto.imagem];
+                    }
+
+                    // Cria as imagens (máximo 2 para efeito hover)
+                    if (imagens.length > 0) {
+                        // Primeira imagem
+                        const img1 = document.createElement('img');
+                        img1.src = imagens[0];
+                        img1.alt = produto.nome || 'Produto';
+                        img1.className = 'produto-img-1';
+                        // Segunda imagem (se existir)
+                        let img2 = null;
+                        if (imagens.length > 1) {
+                            img2 = document.createElement('img');
+                            img2.src = imagens[1];
+                            img2.alt = produto.nome || 'Produto';
+                            img2.className = 'produto-img-2';
+                        }
+                        imagemDiv.appendChild(img1);
+                        if (img2) imagemDiv.appendChild(img2);
+                    }
+
+                    // Bloco de informações do produto
+                    const infoDiv = document.createElement('div');
+                    infoDiv.className = 'produto-info';
+
+                    // Nome do produto
+                    const nomeDiv = document.createElement('div');
+                    nomeDiv.className = 'produto-nome';
+                    nomeDiv.textContent = produto.nome || '';
+
+                    // Preço formatado
+                    const precoDiv = document.createElement('div');
+                    precoDiv.className = 'produto-preco';
+                    if (produto.preco) {
+                        precoDiv.textContent = Number(produto.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                    } else {
+                        precoDiv.textContent = 'R$';
+                    }
+
+                    // Contexto/trust section
+                    const contextoDiv = document.createElement('div');
+                    contextoDiv.className = 'produto-contexto';
+                    contextoDiv.innerHTML = '<i class="fas fa-store"></i> Fale direto com a loja';
+
+                    infoDiv.appendChild(nomeDiv);
+                    infoDiv.appendChild(precoDiv);
+                    infoDiv.appendChild(contextoDiv);
+
+                    // Botão
+                    const btn = document.createElement('button');
+                    btn.className = 'produto-whatsapp-btn';
+                    btn.innerHTML = 'Negocie <i class="fab fa-whatsapp"></i>';
+                    infoDiv.appendChild(btn);
+
+                    card.appendChild(imagemDiv);
+                    card.appendChild(infoDiv);
+                    grid.appendChild(card);
+                });
+            } catch (e) {
+                grid.innerHTML = '<p>Erro ao carregar produtos.</p>';
+            } finally {
+                if (loadingDiv) loadingDiv.style.display = 'none';
+                stopSpinLoader();
+            }
+        }
+        window.addEventListener('DOMContentLoaded', carregarProdutos);
+    </script>
+
+    <footer>
+        <div class="footer-section">
+            <p><i class="far fa-copyright"></i> Núbia Rocha</p>
+        </div>
+        <div class="footer-section">
+            <div class="social-links">
+                <a href="https://api.whatsapp.com/send/?phone=5538991928407&text&type=phone_number&app_absent=0"
+                    class="social-link" aria-label="WhatsApp">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+                <a href="https://www.instagram.com/nubiarochaescolademusica?utm_source=ig_web_button_share_sheet&igsh=MXZiZm01dmZ0b2EzeA=="
+                    class="social-link" aria-label="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://www.facebook.com/MusicaDosSonhos" class="social-link" aria-label="Facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="footer-section">
+            <a href="mailto:nubiarochaescolademusica@gmail.com" class="email-link">
+                <i class="far fa-envelope"></i>
+                nubiarochaescolademusica@gmail.com
+            </a>
+        </div>
+    </footer>
+</body>
+
+</html>

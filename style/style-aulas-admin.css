@@ -1,4 +1,6 @@
-/* Reset básico */
+/* ========================================
+   RESET AND BASE STYLES
+   ======================================== */
 * {
     margin: 0;
     padding: 0;
@@ -6,7 +8,13 @@
     font-family: Arial, sans-serif;
 }
 
-/* Estilos do login (mantendo os originais) */
+body {
+    display: flex;
+    height: 100vh;
+    background-color: #f5f5f5;
+}
+
+/* Login Page Styles */
 body#index {
     background-color: #e0e0e0;
     height: 100vh;
@@ -14,6 +22,10 @@ body#index {
     justify-content: center;
     align-items: center;
 }
+
+/* ========================================
+   LOGIN FORM
+   ======================================== */
 
 #login {
     background: #fff;
@@ -80,14 +92,9 @@ body#index {
     padding-right: 40px;
 }
 
-/* Layout principal da página de aulas */
-body {
-    display: flex;
-    height: 100vh;
-    background-color: #f5f5f5;
-}
-
-/* Sidebar */
+/* ========================================
+   SIDEBAR
+   ======================================== */
 .sidebar {
     width: 220px;
     background: #fff;
@@ -146,7 +153,9 @@ body {
     opacity: 0;
 }
 
-/* Conteúdo */
+/* ========================================
+   MAIN CONTENT AREA
+   ======================================== */
 .content {
     flex: 1;
     padding: 20px;
@@ -219,7 +228,9 @@ body {
     color: #fff;
 }
 
-/* Grid de aulas (ajustado) */
+/* ========================================
+   AULAS GRID
+   ======================================== */
 .grid {
     display: flex;
     gap: 30px;
@@ -313,7 +324,9 @@ body {
     margin: 0 10px;
 }
 
-/* Responsividade */
+/* ========================================
+   RESPONSIVE DESIGN - TABLETS
+   ======================================== */
 @media (max-width: 900px) {
     .grid {
         flex-direction: column;
@@ -334,6 +347,9 @@ body {
     }
 }
 
+/* ========================================
+   RESPONSIVE DESIGN - MOBILE
+   ======================================== */
 @media (max-width: 600px) {
     .content {
         padding: 15px;
