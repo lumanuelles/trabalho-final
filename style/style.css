@@ -135,7 +135,6 @@ header {
         rgba(42, 95, 126, 0.85) 50%,
         rgba(93, 179, 194, 0.8) 75%,
         rgba(147, 217, 226, 0.85) 100%);
-    clip-path: polygon(0 0, 100% 0, 100% 72%, 0% 97%);
     z-index: 1;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
 }
@@ -151,7 +150,6 @@ header {
         radial-gradient(circle at 20% 30%, rgba(147, 217, 226, 0.3) 0%, transparent 40%),
         radial-gradient(circle at 80% 60%, rgba(255, 255, 255, 0.1) 0%, transparent 35%),
         linear-gradient(45deg, transparent 30%, rgba(147, 217, 226, 0.08) 50%, transparent 70%);
-    clip-path: polygon(0 0, 100% 0, 100% 72%, 0% 97%);
     z-index: 2;
     pointer-events: none;
 }
@@ -161,7 +159,7 @@ header {
     width: min(550px, 55vw);
     height: min(400px, 40vw);
     right: 1.2%;
-    bottom: 2.5%;
+    bottom: 10%;
     z-index: 4;
     transform: rotate(290deg);
     filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4));
@@ -221,7 +219,7 @@ header {
 
 .cta-button {
     display: inline-block;
-    padding: 14px 32px;
+    padding: 21px 48px;
     font-size: 1rem;
     font-weight: 600;
     text-decoration: none;
@@ -617,11 +615,14 @@ header {
     font-size: 42px;
     font-weight: 800;
     color: #17385a;
-    margin-bottom: 60px;
     letter-spacing: 0.5px;
     text-align: center;
     width: 100%;
     text-transform: uppercase;
+}
+
+.section-title.sobre {
+    margin-bottom: 90px;
 }
 
 .trajectory-section .content-container {
@@ -980,7 +981,6 @@ body.aulas-page::before {
     font-size: 2.5rem;
     font-weight: 700;
     color: #1a1a1a;
-    margin-bottom: 90px;
 }
 
 .section-description {
@@ -1204,7 +1204,7 @@ body.aulas-page::before {
 .circular-layout {
     position: relative;
     width: 1000px;
-    height: 550px;
+    height: 400px;
     max-width: 95vw;
 }
 
@@ -1497,6 +1497,16 @@ footer a {
 
     .info {
         justify-content: center;
+        padding-left: 0;
+        gap: 40px;
+    }
+
+    .coluna .dado {
+        font-size: clamp(3rem, 7vw, 3.5rem);
+    }
+
+    .coluna .nome {
+        font-size: clamp(1.2rem, 3vw, 1.4rem);
     }
 
     /* Remove separate section backgrounds */
@@ -1673,16 +1683,17 @@ footer a {
         row-gap: 10px;
         flex-wrap: wrap;
         justify-content: center;
+        padding-left: 0;
     }
 
     .coluna .dado {
-        font-size: clamp(2rem, 6vw, 2.5rem);
+        font-size: clamp(2.5rem, 8vw, 3rem);
         min-width: 4ch;
         margin-bottom: 0;
     }
 
     .coluna .nome {
-        font-size: clamp(1rem, 3vw, 1.1rem);
+        font-size: clamp(1.15rem, 4vw, 1.3rem);
         margin-top: 4px;
     }
 
@@ -1970,6 +1981,21 @@ footer a {
         font-size: 1rem;
         text-align: left;
         width: 100%;
+    }
+
+    .info {
+        gap: 25px;
+        padding-left: 0;
+    }
+
+    .coluna .dado {
+        font-size: clamp(2.2rem, 9vw, 2.8rem);
+        text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.6);
+    }
+
+    .coluna .nome {
+        font-size: clamp(1.1rem, 4.5vw, 1.2rem);
+        margin-top: 3px;
     }
 
     .circular-layout {
