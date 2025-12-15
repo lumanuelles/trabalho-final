@@ -68,7 +68,7 @@ document.getElementById('bt-entrar').addEventListener('click', async (e) => {
             
             showMessage('Login realizado com sucesso! Redirecionando...');
             setTimeout(() => {
-                window.location.href = '../admin/index.html';
+                window.location.href = '../admin';
             }, 1000);
         } else {
             // Trata erros de validação ou autenticação

@@ -6,6 +6,149 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Produtos - Admin</title>
     <link rel="stylesheet" href="../../style/style-admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Lightbox modal styles */
+        .produto-lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.92);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .produto-lightbox.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .produto-lightbox-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .produto-lightbox-image-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .produto-lightbox-image-container img {
+            max-width: 85vw;
+            max-height: 80vh;
+            object-fit: contain;
+            border-radius: 8px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            position: absolute;
+            pointer-events: none;
+        }
+
+        .produto-lightbox-image-container img.active {
+            opacity: 1;
+            position: relative;
+            pointer-events: auto;
+        }
+
+        .produto-lightbox-close {
+            position: absolute;
+            top: -40px;
+            right: -10px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 32px;
+            cursor: pointer;
+            padding: 8px;
+            transition: transform 0.2s ease;
+        }
+
+        .produto-lightbox-close:hover {
+            transform: scale(1.1);
+        }
+
+        .produto-lightbox-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease;
+            z-index: 10;
+        }
+
+        .produto-lightbox-arrow:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .produto-lightbox-arrow.prev {
+            left: -70px;
+        }
+
+        .produto-lightbox-arrow.next {
+            right: -70px;
+        }
+
+        .produto-lightbox-arrow i {
+            font-size: 20px;
+            color: #fff;
+        }
+
+        .produto-lightbox-dots {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .produto-lightbox-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.2s ease;
+            border: none;
+            padding: 0;
+        }
+
+        .produto-lightbox-dot.active {
+            background: #fff;
+            transform: scale(1.2);
+        }
+
+        .produto-lightbox-dot:hover {
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        @media (max-width: 768px) {
+            .produto-lightbox-arrow.prev {
+                left: 10px;
+            }
+            .produto-lightbox-arrow.next {
+                right: 10px;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -100,19 +243,12 @@
             </div>
         </div>
 
-        <!-- Modal para visualizar imagens -->
-        <div class="modal" id="imagemModal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2>Imagens do Produto</h2>
-                    <button class="modal-close" onclick="closeImageModal()">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div id="imagemGallery" class="image-gallery"></div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" onclick="closeImageModal()">Fechar</button>
-                </div>
+        <!-- Lightbox para visualizar imagens -->
+        <div class="produto-lightbox" id="produtoLightbox">
+            <div class="produto-lightbox-content">
+                <button class="produto-lightbox-close" onclick="closeLightbox()"><i class="fas fa-times"></i></button>
+                <div class="produto-lightbox-image-container" id="lightboxImageContainer"></div>
+                <div class="produto-lightbox-dots" id="lightboxDots"></div>
             </div>
         </div>
 
@@ -204,29 +340,135 @@
             window.imagensToRemove = [];
         }
 
+        // Lightbox state
+        let currentLightboxImages = [];
+        let currentLightboxIndex = 0;
+
         function viewImages(produtoId) {
             const produto = allProdutos.find(p => p.id == produtoId);
             if (!produto) return;
 
-            const gallery = document.getElementById('imagemGallery');
             const imagens = produto.imagens || [];
 
             if (imagens.length === 0) {
-                gallery.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🖼️</div><div class="empty-state-text">Nenhuma imagem disponível</div></div>';
-            } else {
-                gallery.innerHTML = imagens.map(url => `
-                    <div class="gallery-item">
-                        <img src="${url}" alt="Imagem do produto" onerror="this.src='https://via.placeholder.com/300x300?text=Imagem+Indisponível'">
-                    </div>
-                `).join('');
+                alert('Nenhuma imagem disponível para este produto.');
+                return;
             }
 
-            document.getElementById('imagemModal').classList.add('active');
+            openLightbox(imagens, 0);
         }
 
-        function closeImageModal() {
-            document.getElementById('imagemModal').classList.remove('active');
+        function openLightbox(images, startIndex = 0) {
+            currentLightboxImages = images;
+            currentLightboxIndex = startIndex;
+            updateLightboxContent();
+            document.getElementById('produtoLightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
         }
+
+        function updateLightboxContent() {
+            const imageContainer = document.getElementById('lightboxImageContainer');
+            const dotsContainer = document.getElementById('lightboxDots');
+            
+            // Clear existing images (keep arrows if they exist)
+            const existingArrows = imageContainer.querySelectorAll('.produto-lightbox-arrow');
+            imageContainer.innerHTML = '';
+            
+            // Add all images
+            currentLightboxImages.forEach((src, i) => {
+                const img = document.createElement('img');
+                img.src = src;
+                img.className = i === currentLightboxIndex ? 'active' : '';
+                img.onerror = function() { this.src = 'https://via.placeholder.com/300x300?text=Imagem+Indisponível'; };
+                imageContainer.appendChild(img);
+            });
+            
+            // Add navigation arrows if more than one image
+            if (currentLightboxImages.length > 1) {
+                const prevArrow = document.createElement('button');
+                prevArrow.className = 'produto-lightbox-arrow prev';
+                prevArrow.innerHTML = '<i class="fas fa-chevron-left"></i>';
+                prevArrow.onclick = () => navigateLightbox(-1);
+                
+                const nextArrow = document.createElement('button');
+                nextArrow.className = 'produto-lightbox-arrow next';
+                nextArrow.innerHTML = '<i class="fas fa-chevron-right"></i>';
+                nextArrow.onclick = () => navigateLightbox(1);
+                
+                imageContainer.appendChild(prevArrow);
+                imageContainer.appendChild(nextArrow);
+            }
+            
+            // Update dots
+            dotsContainer.innerHTML = '';
+            if (currentLightboxImages.length > 1) {
+                currentLightboxImages.forEach((_, i) => {
+                    const dot = document.createElement('button');
+                    dot.className = `produto-lightbox-dot${i === currentLightboxIndex ? ' active' : ''}`;
+                    dot.onclick = () => goToLightboxSlide(i);
+                    dotsContainer.appendChild(dot);
+                });
+            }
+        }
+
+        function navigateLightbox(direction) {
+            currentLightboxIndex += direction;
+            if (currentLightboxIndex < 0) currentLightboxIndex = currentLightboxImages.length - 1;
+            if (currentLightboxIndex >= currentLightboxImages.length) currentLightboxIndex = 0;
+            
+            const imageContainer = document.getElementById('lightboxImageContainer');
+            const images = imageContainer.querySelectorAll('img');
+            const dots = document.querySelectorAll('.produto-lightbox-dot');
+            
+            images.forEach((img, i) => {
+                img.classList.toggle('active', i === currentLightboxIndex);
+            });
+            
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentLightboxIndex);
+            });
+        }
+
+        function goToLightboxSlide(index) {
+            currentLightboxIndex = index;
+            
+            const imageContainer = document.getElementById('lightboxImageContainer');
+            const images = imageContainer.querySelectorAll('img');
+            const dots = document.querySelectorAll('.produto-lightbox-dot');
+            
+            images.forEach((img, i) => {
+                img.classList.toggle('active', i === currentLightboxIndex);
+            });
+            
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentLightboxIndex);
+            });
+        }
+
+        function closeLightbox() {
+            document.getElementById('produtoLightbox').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Keyboard navigation for lightbox
+        document.addEventListener('keydown', function(e) {
+            const lightbox = document.getElementById('produtoLightbox');
+            if (!lightbox || !lightbox.classList.contains('active')) return;
+            
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') navigateLightbox(-1);
+            if (e.key === 'ArrowRight') navigateLightbox(1);
+        });
+
+        // Close lightbox when clicking outside the image
+        document.addEventListener('DOMContentLoaded', function() {
+            const lightbox = document.getElementById('produtoLightbox');
+            if (lightbox) {
+                lightbox.addEventListener('click', function(e) {
+                    if (e.target === lightbox) closeLightbox();
+                });
+            }
+        });
 
         async function saveProduto() {
             const form = document.getElementById('produtoForm');

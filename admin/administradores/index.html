@@ -39,7 +39,7 @@
                                 <tr>
                                     <th><input type="checkbox" onchange="selectAll(this)"></th>
                                     <th>ID</th>
-                                    <th>Username</th>
+                                    <th>Usuário</th>
                                     <th>Email</th>
                                 </tr>
                             </thead>
@@ -113,11 +113,10 @@
         }
 
         function selectAll(checkbox) {
-            const checkboxes = document.querySelectorAll('#adminsTable tbody input[type="checkbox"]');
+            const checkboxes = document.querySelectorAll('#adminsTable tbody input[type="checkbox"]:not(:disabled)');
             checkboxes.forEach(cb => {
-                // Não permitir seleção do próprio usuário ou super admin
-                const row = cb.closest('tr');
                 const adminId = parseInt(cb.dataset.id);
+                // Não permitir seleção do usuário ID 1 ou do próprio usuário
                 if (adminId !== 1 && adminId !== currentUserId) {
                     cb.checked = checkbox.checked;
                 }
@@ -146,16 +145,26 @@
                 tbody.innerHTML = '<tr><td colspan="4" class="empty-state"><div class="empty-state-icon">👥</div><div class="empty-state-text">Nenhum administrador encontrado</div><div class="empty-state-subtext">Adicione administradores para começar</div></td></tr>';
             } else {
                 tbody.innerHTML = pageData.map(admin => {
-                    const isProtected = admin.id === 1 || admin.id === currentUserId;
-                    const checkboxHtml = isProtected 
-                        ? '<input type="checkbox" disabled title="Este usuário não pode ser selecionado">' 
-                        : `<input type="checkbox" data-id="${admin.id}">`;
+                    const isId1 = admin.id === 1;
+                    const isCurrentUser = admin.id === currentUserId;
+                    const isProtected = isId1 || isCurrentUser;
+                    
+                    let checkboxHtml;
+                    if (isId1) {
+                        // ID 1 nunca pode ser selecionado
+                        checkboxHtml = '<input type="checkbox" disabled title="O super administrador não pode ser selecionado">';
+                    } else if (isCurrentUser) {
+                        // Usuário atual não pode se auto-selecionar
+                        checkboxHtml = '<input type="checkbox" disabled title="Você não pode se auto-selecionar">';
+                    } else {
+                        checkboxHtml = `<input type="checkbox" data-id="${admin.id}">`;
+                    }
                     
                     return `
                         <tr ${isProtected ? 'style="background: rgba(147, 217, 226, 0.05);"' : ''}>
                             <td>${checkboxHtml}</td>
-                            <td>${admin.id}${admin.id === 1 ? ' 🔒' : admin.id === currentUserId ? ' (Você)' : ''}</td>
-                            <td>${admin.username || 'N/A'}</td>
+                            <td>${admin.id}</td>
+                            <td>${admin.username || 'N/A'}${isCurrentUser ? ' (Você)' : ''}${isId1 && !isCurrentUser ? ' (Super Admin)' : ''}</td>
                             <td>${admin.email || 'N/A'}</td>
                         </tr>
                     `;
@@ -242,11 +251,25 @@
         }
 
         async function deleteSelected() {
-            const checked = Array.from(document.querySelectorAll('#adminsTable tbody input:checked')).map(cb => parseInt(cb.dataset.id));
+            let checked = Array.from(document.querySelectorAll('#adminsTable tbody input:checked')).map(cb => parseInt(cb.dataset.id));
             
             if (checked.length === 0) {
                 alert('Selecione pelo menos um administrador para excluir');
                 return;
+            }
+            
+            // Verificar se o usuário ID 1 está selecionado e remover da lista
+            if (checked.includes(1)) {
+                alert('O administrador principal (ID 1) não pode ser excluído. Ele será desmarcado da seleção.');
+                // Desmarcar o checkbox do usuário ID 1
+                const checkbox1 = document.querySelector('#adminsTable tbody input[data-id="1"]');
+                if (checkbox1) checkbox1.checked = false;
+                // Remover ID 1 da lista
+                checked = checked.filter(id => id !== 1);
+                
+                if (checked.length === 0) {
+                    return;
+                }
             }
             
             if (!confirm(`Deseja realmente excluir ${checked.length} administrador(es)?\n\nEsta ação não pode ser desfeita!`)) {

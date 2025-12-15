@@ -330,11 +330,13 @@
             opacity: 0;
             transition: opacity 0.3s ease;
             position: absolute;
+            pointer-events: none;
         }
 
         .produto-lightbox-image-container img.active {
             opacity: 1;
             position: relative;
+            pointer-events: auto;
         }
 
         .produto-lightbox-close {
