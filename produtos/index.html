@@ -827,6 +827,18 @@
                     const btn = document.createElement('button');
                     btn.className = 'produto-whatsapp-btn';
                     btn.innerHTML = 'Negocie <i class="fab fa-whatsapp"></i>';
+                    
+                    // Criar mensagem personalizada para WhatsApp
+                    const nomeProduto = produto.nome || 'este produto';
+                    const mensagem = `Olá! Tenho interesse em ${nomeProduto}. Poderia me fornecer mais informações?`;
+                    
+                    const mensagemEncoded = encodeURIComponent(mensagem);
+                    const whatsappURL = `https://wa.me/5538991928407?text=${mensagemEncoded}`;
+                    
+                    btn.onclick = () => {
+                        window.open(whatsappURL, '_blank');
+                    };
+                    
                     infoDiv.appendChild(btn);
 
                     card.appendChild(imagemDiv);

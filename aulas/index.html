@@ -141,6 +141,11 @@
                 'Ukulele', 'Violino', 'Piano', 'Violão', 'Órgão Eletrônico'
             ];
 
+            const mobileInstruments = [
+                'Órgão Eletrônico', 'Violão', 'Piano', 'Violino', 'Ukulele',
+                'Saxofone', 'Teclado', 'Bateria', 'Flauta Doce', 'Flauta Transversal'
+            ];
+
             const instrumentImageMap = {
                 'flauta transversal': 'flauta-transversal.png',
                 'flauta-transversal': 'flauta-transversal.png',
@@ -204,14 +209,13 @@
                 }
 
                 const newSrc = '../images/' + file;
-                const fadeMs = 110; // keep sync with CSS .image-center transition
+                const fadeMs = 240; // slightly longer than CSS transition (220ms)
 
                 // Helper to check if the currently loaded image already matches the requested file
                 const currentMatches = img.src && img.src.indexOf(file) !== -1;
 
-                if (currentMatches) {
+                if (currentMatches && container.classList.contains('visible')) {
                     // already showing the right image — ensure visible
-                    container.classList.add('visible');
                     container.setAttribute('aria-hidden', 'false');
                     img.alt = instrumentName;
                     return;
@@ -231,23 +235,33 @@
                     state.pendingTimeout = setTimeout(() => {
                         // if a newer request arrived, only proceed if it matches
                         if (state.pendingFile !== file) return;
+                        
                         img.src = newSrc;
                         img.alt = instrumentName;
-                        // small timeout to ensure src took effect before fading in
-                        requestAnimationFrame(() => {
-                            requestAnimationFrame(() => {
-                                container.classList.add('visible');
-                                container.setAttribute('aria-hidden', 'false');
-                                state.pendingTimeout = null;
-                            });
-                        });
+                        
+                        // Wait for image to load before showing
+                        img.onload = () => {
+                            if (state.pendingFile !== file) return;
+                            container.classList.add('visible');
+                            container.setAttribute('aria-hidden', 'false');
+                            state.pendingTimeout = null;
+                        };
+                        
+                        // Fallback if onload doesn't fire (cached)
+                        if (img.complete) {
+                            img.onload();
+                        }
                     }, fadeMs);
                 } else {
                     // not visible: just set and show immediately
                     img.src = newSrc;
                     img.alt = instrumentName;
-                    container.classList.add('visible');
-                    container.setAttribute('aria-hidden', 'false');
+                    img.onload = () => {
+                        if (state.pendingFile !== file) return;
+                        container.classList.add('visible');
+                        container.setAttribute('aria-hidden', 'false');
+                    };
+                    if (img.complete) img.onload();
                 }
             }
 
@@ -385,6 +399,22 @@
                     inner.textContent = instrument;
                     label.appendChild(inner);
 
+                    // Add click handler for WhatsApp
+                    const clickHandler = (e) => {
+                        e.stopPropagation();
+                        const mensagem = `Olá, gostaria de agendar uma aula de ${instrument}. Poderia me informar sobre disponibilidade e valores?`;
+                        const mensagemEncoded = encodeURIComponent(mensagem);
+                        const whatsappURL = `https://wa.me/5538991928407?text=${mensagemEncoded}`;
+                        window.open(whatsappURL, '_blank');
+                    };
+                    label.addEventListener('click', clickHandler);
+                    label.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            clickHandler(e);
+                        }
+                    });
+
                     const nodeRadius = 13;
                     const labelOffset = Math.min(Math.max(7, rect.width * 0.02), Math.min(rect.width * 0.05, 40));
                     const labelRadius = finalRadius + labelOffset + nodeRadius;
@@ -409,7 +439,10 @@
                     // Use setActiveInstrument so label visual state and image logic stay consistent.
                     label.addEventListener('mouseenter', () => { stopAutoplay(); setActiveInstrument(i, { source: 'hover' }); });
                     // Do NOT hide the center image on mouseleave — just resume autoplay after a short delay.
-                    label.addEventListener('mouseleave', () => { setTimeout(() => startAutoplay(), 400); });
+                    label.addEventListener('mouseleave', () => { 
+                        label.blur(); // Remove focus to prevent "stuck" active state
+                        setTimeout(() => startAutoplay(), 400); 
+                    });
                     label.addEventListener('focus', () => { stopAutoplay(); setActiveInstrument(i, { source: 'hover' }); });
                     // Do NOT hide the center image on blur — just resume autoplay after a short delay.
                     label.addEventListener('blur', () => { setTimeout(() => startAutoplay(), 400); });
@@ -478,22 +511,25 @@
 
             // Carousel functionality for mobile/tablet
             let carouselIntervalId = null;
-            let currentCarouselIndex = 9; // Start with Órgão Eletrônico (last item)
+            let currentCarouselIndex = 0; // Start with Órgão Eletrônico (first item in mobileInstruments)
             const carouselDelay = 2500;
+            let isTransitioning = false; // Flag to prevent fast swipe bugs
 
             function initCarousel() {
                 const dotsContainer = document.getElementById('carouselDots');
+                const listContainer = document.getElementById('instrumentsSimpleList');
                 if (!dotsContainer) return;
 
                 // Create dots
                 dotsContainer.innerHTML = '';
-                instruments.forEach((_, index) => {
+                mobileInstruments.forEach((_, index) => {
                     const dot = document.createElement('div');
                     dot.className = 'carousel-dot';
                     if (index === currentCarouselIndex) {
                         dot.classList.add('active');
                     }
                     dot.addEventListener('click', () => {
+                        if (isTransitioning) return;
                         stopCarousel();
                         setCarouselItem(index);
                         setTimeout(() => startCarousel(), 3000);
@@ -501,14 +537,56 @@
                     dotsContainer.appendChild(dot);
                 });
 
+                // Add swipe support
+                if (listContainer) {
+                    let touchStartX = 0;
+                    let isSwiping = false;
+
+                    listContainer.addEventListener('touchstart', e => {
+                        if (isTransitioning) return;
+                        touchStartX = e.changedTouches[0].screenX;
+                        isSwiping = true;
+                        stopCarousel();
+                    }, { passive: true });
+
+                    listContainer.addEventListener('touchend', e => {
+                        if (!isSwiping || isTransitioning) return;
+                        isSwiping = false;
+                        const touchEndX = e.changedTouches[0].screenX;
+                        handleSwipe(touchStartX, touchEndX);
+                        setTimeout(() => startCarousel(), 3000);
+                    }, { passive: true });
+
+                    listContainer.addEventListener('touchcancel', () => {
+                        isSwiping = false;
+                        setTimeout(() => startCarousel(), 3000);
+                    }, { passive: true });
+
+                    function handleSwipe(startX, endX) {
+                        const threshold = 50;
+                        if (endX < startX - threshold) {
+                            // Swipe Left -> Next
+                            const nextIndex = (currentCarouselIndex + 1) % mobileInstruments.length;
+                            setCarouselItem(nextIndex);
+                        } else if (endX > startX + threshold) {
+                            // Swipe Right -> Prev
+                            const prevIndex = (currentCarouselIndex - 1 + mobileInstruments.length) % mobileInstruments.length;
+                            setCarouselItem(prevIndex);
+                        }
+                    }
+                }
+
                 // Set initial item
                 setCarouselItem(currentCarouselIndex);
                 startCarousel();
             }
 
             function setCarouselItem(index) {
+                if (isTransitioning) return;
+                isTransitioning = true;
+                
                 currentCarouselIndex = index;
-                const instrumentName = instruments[index];
+                const instrumentName = mobileInstruments[index];
                 const nameElement = document.getElementById('carouselInstrumentName');
                 const imageElement = document.getElementById('carouselImage');
                 const imageContainer = document.getElementById('carouselImageContainer');
@@ -538,18 +616,27 @@
                             // Fade in new image
                             requestAnimationFrame(() => {
                                 imageElement.classList.add('active');
+                                // Allow next transition after animation completes
+                                setTimeout(() => {
+                                    isTransitioning = false;
+                                }, 200);
                             });
                         }, 200);
                     } else {
                         imageElement.classList.remove('active');
+                        setTimeout(() => {
+                            isTransitioning = false;
+                        }, 200);
                     }
+                } else {
+                    isTransitioning = false;
                 }
             }
 
             function startCarousel() {
                 stopCarousel();
                 carouselIntervalId = setInterval(() => {
-                    currentCarouselIndex = (currentCarouselIndex - 1 + instruments.length) % instruments.length;
+                    currentCarouselIndex = (currentCarouselIndex + 1) % mobileInstruments.length;
                     setCarouselItem(currentCarouselIndex);
                 }, carouselDelay);
             }
